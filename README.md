@@ -1,8 +1,8 @@
-This project was a tool created maily to increase my rank in my Fantasy Premier League. The name is inspired from the Sci-Fi fantasy novel Dune, where a "Mentat" is a human with computer like power/vision who can analyze data and make predictions.
+This project was a tool created mainly to increase my rank in my Fantasy Premier League. The name is inspired by the Sci-Fi fantasy novel Dune, where a "Mentat" is a human with computer-like analytical powers who provides valuable political insights to the ruling class.
 
 Fitting with that theme, this tool predicts which players are most likely to earn the highest amount of points in a given gameweek.
 
-Along with helping me gain fantasy league rank, I also wanted to spend my free time working on a project that gave me experience with some essential Data Engineering tools that I haven't had the opportunity to use in industry.
+Along with helping me gain fantasy league rank, I also wanted to spend my free time working on a project that gave me experience with some essential Data Engineering tools that I haven't had the opportunity to use in industry(DuckDB, dbt, and Airflow).
 
 The Tech Stack used to create this project include-
 - Python: Data ingestion
