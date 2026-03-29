@@ -81,8 +81,6 @@ if r_events.status_code == 200:
         print(f"...{element} loaded into [DuckDB]")
         print("✓ Events loaded successfully!")
 else:
-    print(f"x Events not loaded successfully, error code {r_events.status_code}")
-
     # Log
     con.execute("""
                 INSERT INTO raw_log(payload, response_code, table_name, timestamp, status)
@@ -94,6 +92,9 @@ else:
                     datetime.datetime.now(),
                     f'failure: {r_events.status_code}'
                 ])
+    raise Exception(
+        f"x Events not loaded successfully, error code {r_events.status_code}"
+    )
 
 
 
@@ -102,13 +103,20 @@ print(f"[2/3] Loading GW data tables...")
 
 all_gw_df = []
 
+expected_rows = 0
+
 for gw in range(1,39):
     elements_url = f'https://fantasy.premierleague.com/api/event/{str(gw)}/live/'
     r_elements = requests.get(elements_url, headers = headers)
 
     if r_elements.status_code == 200:
         full_events_data = r_elements.json()
+
+        # Capture expected rows for validation later
+        expected_rows += len(full_events_data['elements'])
+
         df = pd.json_normalize(full_events_data['elements'])
+        
 
         df['gameweek'] = gw
         all_gw_df.append(df)
@@ -141,12 +149,17 @@ for gw in range(1,39):
                         'failure'
                     ]
                 )
-    
+# Throw exception if list is empty
+if not all_gw_df:
+    raise Exception(
+        "x No GW data was loaded, all requests failed"
+    )
+
 player_gw_df = pd.concat(all_gw_df, ignore_index=True)
 
-if len(player_gw_df)>1: # TODO: Update to actual value
-    print(f"...player gw data loaded: {len(player_gw_df)} rows")
-
+if len(player_gw_df)==expected_rows:
+    print(f"...expected {expected_rows} rows of player gw data, got {len(player_gw_df)} rows")
+    
     # Create GW DuckDB table
     con.execute(f"""
                 CREATE TABLE IF NOT EXISTS raw_gw_data AS SELECT * FROM player_gw_df WHERE 1=0
@@ -158,7 +171,10 @@ if len(player_gw_df)>1: # TODO: Update to actual value
     print("✓ Player GW data loaded successfully")
 
 else:
-    print("x Player GW data not loaded successfully")
+    raise Exception(
+        f"...expected {expected_rows} rows of player data, got {len(player_gw_df)} rows"
+        "x Player GW data not loaded successfully"
+    )
 
 
 
@@ -167,6 +183,8 @@ print(f"[3/3] Loading Fixtures tables...")
 
 all_fixtures_df = []
 
+expected_fixtures = 0
+
 for gw in range(1,39):
     fixtures_url = f'https://fantasy.premierleague.com/api/fixtures/?event={str(gw)}'
     r_fixtures = requests.get(fixtures_url, headers = headers)
@@ -174,6 +192,10 @@ for gw in range(1,39):
     if r_fixtures.status_code == 200:
         full_fixtures_data = r_fixtures.json()
         df = pd.json_normalize(full_fixtures_data)
+
+        # Capture expected fixtures for validation
+        expected_fixtures+=len(full_fixtures_data)
+
         df['gameweek'] = gw
         all_fixtures_df.append(df)
 
@@ -207,9 +229,14 @@ for gw in range(1,39):
         print(f"x Player GW data not loaded successfully, error code {r_fixtures.status_code}")
     
     
+if not all_fixtures_df:
+    raise Exception(
+        f"x No Fixtures data was loaded, all requests failed"
+    )
+
 fixtures_gw_df = pd.concat(all_fixtures_df, ignore_index=True)
 
-if len(fixtures_gw_df)>1: # TODO: Update to actual value
+if len(fixtures_gw_df)==expected_fixtures:
 
     # Create GW DuckDB table
     con.execute(f"""
@@ -219,9 +246,13 @@ if len(fixtures_gw_df)>1: # TODO: Update to actual value
     # Insert into GW table
     con.execute(f"INSERT INTO raw_fixtures SELECT * FROM fixtures_gw_df")
 
-    print(f"...fixtures gw data loaded: {len(fixtures_gw_df)} rows")
+    print(f"...expected {expected_fixtures} rows of fixture data, got {len(fixtures_gw_df)} rows")
     print("✓ Fixtures data loaded successfully")
 else:
-    print("x Fixtures data not loaded successfully")
+    raise Exception(
+        "x Fixtures data not loaded successfully"
+    )
 
-print("*Raw Layer Ingestion Complete")
+
+print("-----------------------------")
+print("Raw Layer Ingestion Complete")
