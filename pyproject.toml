@@ -1,7 +1,13 @@
 [project]
 name = "fpl-mentat"
-version = "0.1.0"
-description = "Add your description here"
+authors = [{name = "Vikram Magal", email = "vikrammagal@outlook.com"}]
+version = "0.1.1"
+description = "Predict the best players in a Premier League gameweek to maximize your FPL points"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+requires-python = "~=3.12.0"
+dependencies = [
+    "datetime>=6.0",
+    "duckdb>=1.5.1",
+    "pandas>=3.0.2",
+    "requests>=2.33.1",
+]
