@@ -10,4 +10,6 @@ The Tech Stack used to create this project include-
 - SQL: Used along with DuckDB/dbt to transform data
 - dbt: Used to process data through the Silver/Gold layer
 - Airflow: Pipeline orchestration. Running on a Raspberry pi.
+- uv: Package manager used to resolve dependencies
+- Docker: Used to containerise the project
 - (tbd) LLM [Llama]: To process news data
