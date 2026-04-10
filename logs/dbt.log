@@ -1,0 +1,31 @@
+[0m10:31:02.758141 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b0713a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55c260>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55f560>]}
+
+
+============================== 10:31:02.778709 | acc680ab-8d6f-43c3-ba91-170bb505e4af ==============================
+[0m10:31:02.778709 [info ] [MainThread]: Running with dbt=1.11.7
+[0m10:31:02.778969 [debug] [MainThread]: running dbt with arguments {'fail_fast': 'False', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'partial_parse': 'True', 'target_path': 'None', 'introspect': 'True', 'quiet': 'False', 'empty': 'None', 'invocation_command': 'dbt init', 'warn_error': 'None', 'version_check': 'True', 'no_print': 'None', 'send_anonymous_usage_stats': 'True', 'use_experimental_parser': 'False', 'log_format': 'default', 'static_parser': 'True', 'printer_width': '80', 'write_json': 'True', 'log_cache_events': 'False', 'indirect_selection': 'eager', 'cache_selected_only': 'False', 'profiles_dir': '/Users/vikram/.dbt', 'debug': 'False', 'use_colors': 'True', 'log_path': 'logs'}
+[0m10:31:02.808300 [info ] [MainThread]: Creating dbt configuration folder at /Users/vikram/.dbt
+[0m10:34:06.428938 [debug] [MainThread]: Starter project path: /Users/vikram/Projects/FPL-Mentat/.venv/lib/python3.12/site-packages/dbt/include/starter_project
+[0m10:34:06.443940 [info ] [MainThread]: 
+Your new dbt project "fpl_mentat" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m10:34:06.444436 [info ] [MainThread]: Setting up your profile.
+[0m10:34:24.442847 [info ] [MainThread]: Profile fpl_mentat written to /Users/vikram/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m10:34:24.443258 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 201.7232, "process_in_blocks": "0", "process_kernel_time": 0.367701, "process_mem_max_rss": "151273472", "process_out_blocks": "0", "process_user_time": 1.633848}
+[0m10:34:24.443503 [debug] [MainThread]: Command `dbt init` succeeded at 10:34:24.443448 after 201.72 seconds
+[0m10:34:24.443677 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55fa10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55c260>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55ef90>]}
+[0m10:34:24.443865 [debug] [MainThread]: Flushing usage events
+[0m10:34:24.607327 [debug] [MainThread]: An error was encountered while trying to flush usage events

@@ -8,7 +8,7 @@ import datetime
 headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
 # DuckDB connection
-con = duckdb.connect("data/raw_layer.db")
+con = duckdb.connect("../data/raw_layer.db")
 
 con.execute("CREATE SEQUENCE IF NOT EXISTS raw_log_id_seq START 1") # ID Sequence for log table
 
