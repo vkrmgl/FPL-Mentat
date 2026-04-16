@@ -1,0 +1,434 @@
+version: 2
+ 
+sources:
+  - name: raw_layer
+    database: fpl-mentat
+    schema: main
+    description: >
+      Raw data ingested directly from the Fantasy Premier League (FPL) API.
+      Each table corresponds to a core FPL API endpoint and is append only,
+      with an `ingested_at` timestamp added at load time to track when each
+      batch of records was written.
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: ingested_at
+ 
+    tables:
+      - name: raw_events
+        description: >
+          One row per FPL gameweek (event). Contains gameweek metadata such as
+          deadlines, scoring summaries, chip usage, and top player information.
+          Sourced from the /bootstrap-static/ endpoint.
+        columns:
+          - name: id
+            description: Unique FPL gameweek identifier (1–38).
+          - name: name
+            description: Gameweek label, e.g. "Gameweek 1".
+          - name: deadline_time
+            description: Timestamp of the transfer and squad submission deadline for this gameweek.
+          - name: release_time
+            description: Epoch integer representing when gameweek data was released.
+          - name: average_entry_score
+            description: Average FPL points scored by all managers in this gameweek.
+          - name: finished
+            description: Boolean flag indicating whether the gameweek has concluded.
+          - name: data_checked
+            description: Boolean flag indicating whether FPL has finished verifying points for the gameweek.
+          - name: highest_scoring_entry
+            description: FPL entry ID of the manager with the highest score in the gameweek.
+          - name: deadline_time_epoch
+            description: Unix epoch representation of the gameweek deadline timestamp.
+          - name: deadline_time_game_offset
+            description: Offset (in seconds) applied to the deadline time for game scheduling purposes.
+          - name: highest_score
+            description: Highest individual manager score recorded in the gameweek.
+          - name: is_previous
+            description: Boolean flag- true if this is the most recently completed gameweek.
+          - name: is_current
+            description: Boolean flag- true if this is the active gameweek.
+          - name: is_next
+            description: Boolean flag- true if this is the upcoming gameweek.
+          - name: cup_leagues_created
+            description: Boolean flag indicating whether FPL cup leagues have been created for this gameweek.
+          - name: h2h_ko_matches_created
+            description: Boolean flag indicating whether head-to-head knockout matches have been created.
+          - name: can_enter
+            description: Boolean flag indicating whether managers can still enter the game for this gameweek.
+          - name: can_manage
+            description: Boolean flag indicating whether managers can make changes to their squad.
+          - name: released
+            description: Boolean flag indicating whether the gameweek has been officially released.
+          - name: ranked_count
+            description: Number of managers with a valid rank for this gameweek.
+          - name: overrides
+            description: Any FPL-applied overrides for the gameweek (e.g. bonus point adjustments).
+          - name: chip_plays
+            description: Structured data listing the number of times each chip (wildcard, triple captain, etc.) was played.
+          - name: most_selected
+            description: Player ID of the most-selected player in FPL squads this gameweek.
+          - name: most_transferred_in
+            description: Player ID of the player most transferred in ahead of this gameweek.
+          - name: top_element
+            description: Player ID of the highest-scoring player in this gameweek.
+          - name: top_element_info
+            description: Structured data with additional detail about the top-scoring player (points, etc.).
+          - name: transfers_made
+            description: Total number of transfers made by all managers ahead of this gameweek.
+          - name: most_captained
+            description: Player ID of the most-captained player this gameweek.
+          - name: most_vice_captained
+            description: Player ID of the most vice-captained player this gameweek.
+          - name: ingested_at
+            description: Timestamp when this record was written to the raw layer by the ingestion pipeline.
+ 
+      - name: raw_fixtures
+        description: >
+          One row per Premier League fixture. Contains scheduling information,
+          team identifiers, scorelines, and FPL difficulty ratings for each match.
+          Sourced from the /fixtures/ endpoint.
+        columns:
+          - name: code
+            description: Official Premier League fixture code.
+          - name: event
+            description: Gameweek ID (foreign key to raw_events.id) in which this fixture is scheduled.
+          - name: finished
+            description: Boolean flag indicating whether the fixture has been played and finalised.
+          - name: finished_provisional
+            description: Boolean flag indicating the fixture is provisionally finished (points may still be updated).
+          - name: id
+            description: Unique FPL fixture identifier.
+          - name: kickoff_time
+            description: Scheduled kickoff datetime for the fixture (UTC).
+          - name: minutes
+            description: Number of minutes played; 90 for a completed match.
+          - name: provisional_start_time
+            description: Boolean flag indicating whether the kickoff time is provisional.
+          - name: started
+            description: Boolean flag indicating whether the match has kicked off.
+          - name: team_a
+            description: FPL team ID of the away team (foreign key to raw_teams.id).
+          - name: team_a_score
+            description: Number of goals scored by the away team.
+          - name: team_h
+            description: FPL team ID of the home team (foreign key to raw_teams.id).
+          - name: team_h_score
+            description: Number of goals scored by the home team.
+          - name: team_h_difficulty
+            description: >
+              FPL-assigned fixture difficulty rating (FDR) for the home team (1–5).
+              Higher values indicate a harder fixture.
+          - name: team_a_difficulty
+            description: >
+              FPL-assigned fixture difficulty rating (FDR) for the away team (1–5).
+              Higher values indicate a harder fixture.
+          - name: pulse_id
+            description: External Premier League Pulse system identifier for the fixture.
+          - name: ingested_at
+            description: Timestamp when this record was written to the raw layer by the ingestion pipeline.
+ 
+      - name: raw_gw_data
+        description: >
+          Player-level gameweek performance data. One row per player per gameweek,
+          containing all statistical outputs (goals, assists, minutes, bonus, xG, etc.)
+          alongside explainability detail for FPL point calculations.
+          Sourced from the /event/{gw}/live/ endpoint.
+        columns:
+          - name: id
+            description: FPL player ID (foreign key to raw_players.id).
+          - name: explain
+            description: >
+              Nested structure detailing the point breakdown for each fixture the player
+              appeared in (fixture ID, per-stat values, and points awarded per stat).
+          - name: modified
+            description: Boolean flag indicating whether the player's stats have been manually modified by FPL.
+          - name: stats.minutes
+            description: Total minutes played by the player in the gameweek.
+          - name: stats.goals_scored
+            description: Number of goals scored by the player in the gameweek.
+          - name: stats.assists
+            description: Number of assists recorded for the player in the gameweek.
+          - name: stats.clean_sheets
+            description: Number of clean sheets recorded for the player in the gameweek.
+          - name: stats.goals_conceded
+            description: Number of goals conceded by the player's team while they were on the pitch.
+          - name: stats.own_goals
+            description: Number of own goals scored by the player in the gameweek.
+          - name: stats.penalties_saved
+            description: Number of penalties saved by the player (relevant for goalkeepers).
+          - name: stats.penalties_missed
+            description: Number of penalties missed by the player in the gameweek.
+          - name: stats.yellow_cards
+            description: Number of yellow cards received by the player in the gameweek.
+          - name: stats.red_cards
+            description: Number of red cards received by the player in the gameweek.
+          - name: stats.saves
+            description: Number of saves made by the player (relevant for goalkeepers).
+          - name: stats.bonus
+            description: Bonus points awarded to the player based on the BPS system.
+          - name: stats.bps
+            description: Bonus Points System (BPS) score for the player in the gameweek.
+          - name: stats.influence
+            description: FPL influence score for the player (component of the ICT index).
+          - name: stats.creativity
+            description: FPL creativity score for the player (component of the ICT index).
+          - name: stats.threat
+            description: FPL threat score for the player (component of the ICT index).
+          - name: stats.ict_index
+            description: Overall ICT (Influence, Creativity, Threat) index score.
+          - name: stats.starts
+            description: Number of times the player started a match in the gameweek.
+          - name: stats.expected_goals
+            description: Expected goals (xG) statistic for the player in the gameweek.
+          - name: stats.expected_assists
+            description: Expected assists (xA) statistic for the player in the gameweek.
+          - name: stats.expected_goal_involvements
+            description: Combined expected goals and expected assists (xGI) for the player.
+          - name: stats.expected_goals_conceded
+            description: Expected goals conceded by the player's team while on the pitch.
+          - name: stats.total_points
+            description: Total FPL points earned by the player in the gameweek.
+          - name: gameweek
+            description: Gameweek number this record corresponds to (foreign key to raw_events.id).
+          - name: ingested_at
+            description: Timestamp when this record was written to the raw layer by the ingestion pipeline.
+ 
+      - name: raw_log
+        description: >
+          Audit log of all API ingestion calls made by the pipeline. One row per
+          API request, capturing the response payload, HTTP status, target table,
+          and execution timestamp. Used for monitoring pipeline health and
+          debugging ingestion failures.
+        freshness: null
+        columns:
+          - name: id
+            description: Auto-incrementing unique identifier for the log entry.
+          - name: payload
+            description: Raw JSON response payload returned by the FPL API for this request.
+          - name: response_code
+            description: HTTP response code returned by the FPL API (e.g. 200, 404, 500).
+          - name: table_name
+            description: Name of the raw layer table that was targeted by this ingestion call.
+          - name: timestamp
+            description: Datetime when the API call was executed by the ingestion pipeline.
+          - name: url
+            description: The FPL API endpoint URL that was called.
+          - name: ingested_at
+            description: Timestamp when this log record was written to the raw layer.
+ 
+      - name: raw_players
+        description: >
+          Player master data and current-season aggregate statistics. One row per
+          player per ingestion batch, containing biographical info, positional data,
+          FPL pricing, ownership, and season-to-date performance totals.
+          Sourced from the /bootstrap-static/ endpoint (elements array).
+        columns:
+          - name: id
+            description: Unique FPL player identifier.
+          - name: first_name
+            description: Player's first name.
+          - name: second_name
+            description: Player's surname.
+          - name: known_name
+            description: Player's commonly used display name in FPL (often the surname or a nickname).
+          - name: team
+            description: FPL team ID for the club the player currently plays for (foreign key to raw_teams.id).
+          - name: element_type
+            description: >
+              Player position code: 1 = Goalkeeper, 2 = Defender, 3 = Midfielder, 4 = Forward.
+          - name: can_transact
+            description: Boolean flag indicating whether the player can be transferred in/out.
+          - name: can_select
+            description: Boolean flag indicating whether the player is selectable in FPL squads.
+          - name: chance_of_playing_next_round
+            description: FPL-estimated percentage chance of the player playing in the next gameweek (0–100).
+          - name: chance_of_playing_this_round
+            description: FPL-estimated percentage chance of the player playing in the current gameweek (0–100).
+          - name: code
+            description: Official Premier League player code used across PL data systems.
+          - name: cost_change_event
+            description: Change in the player's FPL price during the current gameweek (in 0.1m units).
+          - name: cost_change_event_fall
+            description: Cumulative price fall for the player in the current gameweek.
+          - name: cost_change_start
+            description: Total price change since the start of the season (in 0.1m units).
+          - name: cost_change_start_fall
+            description: Total price fall since the start of the season.
+          - name: dreamteam_count
+            description: Number of times the player has appeared in the FPL Dream Team this season.
+          - name: ep_next
+            description: FPL-predicted expected points for the player in the next gameweek.
+          - name: ep_this
+            description: FPL-predicted expected points for the player in the current gameweek.
+          - name: event_points
+            description: Points scored by the player in the most recent gameweek.
+          - name: form
+            description: FPL form rating — rolling average points over the last 30 days.
+          - name: in_dreamteam
+            description: Boolean flag indicating whether the player is currently in the FPL Dream Team.
+          - name: news
+            description: Latest FPL news string for the player (e.g. injury updates, suspension notices).
+          - name: news_added
+            description: Timestamp when the latest news item was added.
+          - name: now_cost
+            description: Current FPL price of the player (in 0.1m units, e.g. 90 = £9.0m).
+          - name: photo
+            description: Filename of the player's official FPL profile photo.
+          - name: points_per_game
+            description: Average FPL points scored per gameweek the player has appeared in this season.
+          - name: selected_by_percent
+            description: Percentage of FPL managers who have the player in their squad.
+          - name: special
+            description: Boolean flag for special/promotional FPL entries (rarely used).
+          - name: squad_number
+            description: Player's squad shirt number at their club.
+          - name: status
+            description: >
+              Player availability status code: 'a' = available, 'd' = doubtful,
+              'i' = injured, 'n' = not available, 's' = suspended, 'u' = unavailable.
+          - name: total_points
+            description: Cumulative FPL points scored by the player across all gameweeks this season.
+          - name: transfers_in
+            description: Total number of times the player has been transferred in across all managers this season.
+          - name: transfers_in_event
+            description: Number of times the player was transferred in ahead of the current gameweek.
+          - name: transfers_out
+            description: Total number of times the player has been transferred out across all managers this season.
+          - name: transfers_out_event
+            description: Number of times the player was transferred out ahead of the current gameweek.
+          - name: value_form
+            description: FPL value metric — form score divided by current cost.
+          - name: value_season
+            description: FPL value metric — total season points divided by current cost.
+          - name: web_name
+            description: Short display name used on the FPL website and app.
+          - name: minutes
+            description: Total minutes played by the player across all gameweeks this season.
+          - name: goals_scored
+            description: Total goals scored by the player this season.
+          - name: assists
+            description: Total assists recorded for the player this season.
+          - name: clean_sheets
+            description: Total clean sheets recorded for the player this season.
+          - name: goals_conceded
+            description: Total goals conceded by the player's team while they were on the pitch this season.
+          - name: own_goals
+            description: Total own goals scored by the player this season.
+          - name: penalties_saved
+            description: Total penalties saved by the player this season.
+          - name: penalties_missed
+            description: Total penalties missed by the player this season.
+          - name: yellow_cards
+            description: Total yellow cards received by the player this season.
+          - name: red_cards
+            description: Total red cards received by the player this season.
+          - name: saves
+            description: Total saves made by the player (goalkeeper) this season.
+          - name: bonus
+            description: Total bonus points earned by the player this season.
+          - name: bps
+            description: Cumulative Bonus Points System score for the player this season.
+          - name: influence
+            description: Season-to-date FPL influence score (ICT component).
+          - name: creativity
+            description: Season-to-date FPL creativity score (ICT component).
+          - name: threat
+            description: Season-to-date FPL threat score (ICT component).
+          - name: ict_index
+            description: Season-to-date overall ICT index score.
+          - name: starts
+            description: Total number of match starts by the player this season.
+          - name: expected_goals
+            description: Season-to-date expected goals (xG) for the player.
+          - name: expected_assists
+            description: Season-to-date expected assists (xA) for the player.
+          - name: expected_goal_involvements
+            description: Season-to-date expected goal involvements (xGI = xG + xA) for the player.
+          - name: expected_goals_conceded
+            description: Season-to-date expected goals conceded by the player's team while on the pitch.
+          - name: influence_rank
+            description: Player's rank among all FPL players by influence score.
+          - name: influence_rank_type
+            description: Player's rank among players of the same position by influence score.
+          - name: creativity_rank
+            description: Player's rank among all FPL players by creativity score.
+          - name: creativity_rank_type
+            description: Player's rank among players of the same position by creativity score.
+          - name: threat_rank
+            description: Player's rank among all FPL players by threat score.
+          - name: threat_rank_type
+            description: Player's rank among players of the same position by threat score.
+          - name: ict_index_rank
+            description: Player's rank among all FPL players by ICT index.
+          - name: ict_index_rank_type
+            description: Player's rank among players of the same position by ICT index.
+          - name: corners_and_indirect_freekicks_order
+            description: Numeric order indicating the player's role in taking corners and indirect free kicks (1 = primary taker).
+          - name: corners_and_indirect_freekicks_text
+            description: Text description of the player's set piece responsibility for corners and indirect free kicks.
+          - name: direct_freekicks_order
+            description: Numeric order indicating the player's role in taking direct free kicks (1 = primary taker).
+          - name: direct_freekicks_text
+            description: Text description of the player's set piece responsibility for direct free kicks.
+          - name: penalties_order
+            description: Numeric order indicating the player's role in taking penalties (1 = primary taker).
+          - name: penalties_text
+            description: Text description of the player's penalty taking responsibility.
+          - name: now_cost_rank
+            description: Player's price rank among all FPL players (1 = most expensive).
+          - name: now_cost_rank_type
+            description: Player's price rank among players of the same position.
+          - name: ingested_at
+            description: Timestamp when this record was written to the raw layer by the ingestion pipeline.
+ 
+      - name: raw_teams
+        description: >
+          Premier League team reference data. One row per team per ingestion batch,
+          containing team identifiers, names, current-season league record, and
+          FPL strength ratings used for fixture difficulty calculations.
+          Sourced from the /bootstrap-static/ endpoint (teams array).
+        columns:
+          - name: id
+            description: Unique FPL team identifier.
+          - name: code
+            description: Official Premier League team code used across PL data systems.
+          - name: name
+            description: Full team name (e.g. "Arsenal", "Manchester City").
+          - name: short_name
+            description: Three-letter team abbreviation used in FPL displays (e.g. "ARS", "MCI").
+          - name: strength
+            description: Overall FPL strength rating for the team (1–5 scale).
+          - name: position
+            description: Current league table position for the team this season.
+          - name: played
+            description: Number of Premier League matches played this season.
+          - name: win
+            description: Number of league wins this season.
+          - name: draw
+            description: Number of league draws this season.
+          - name: loss
+            description: Number of league losses this season.
+          - name: points
+            description: Current league points total for the team this season.
+          - name: form
+            description: Recent form string for the team (may be null early in the season).
+          - name: team_division
+            description: Division identifier (typically null for top-flight PL teams).
+          - name: unavailable
+            description: Boolean flag indicating whether the team is unavailable in FPL.
+          - name: strength_overall_home
+            description: FPL overall strength rating for home fixtures (used in FDR calculations).
+          - name: strength_overall_away
+            description: FPL overall strength rating for away fixtures (used in FDR calculations).
+          - name: strength_attack_home
+            description: FPL attacking strength rating for home fixtures.
+          - name: strength_attack_away
+            description: FPL attacking strength rating for away fixtures.
+          - name: strength_defence_home
+            description: FPL defensive strength rating for home fixtures.
+          - name: strength_defence_away
+            description: FPL defensive strength rating for away fixtures.
+          - name: pulse_id
+            description: External Premier League Pulse system identifier for the team.
+          - name: ingested_at
+            description: Timestamp when this record was written to the raw layer by the ingestion pipeline.

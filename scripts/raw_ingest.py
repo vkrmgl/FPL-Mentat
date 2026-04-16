@@ -8,7 +8,7 @@ import datetime
 headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
 # DuckDB connection
-con = duckdb.connect("../data/raw_layer.db")
+con = duckdb.connect("../data/fpl-mentat.duckdb")
 
 con.execute("CREATE SEQUENCE IF NOT EXISTS raw_log_id_seq START 1") # ID Sequence for log table
 
@@ -75,7 +75,7 @@ if r_events.status_code == 200:
         con.execute(f"""
                     CREATE TABLE IF NOT EXISTS {table_name} AS SELECT * FROM payload_df WHERE 1=0
                     """)
-        
+
         # Insert into Events tables
         con.execute(f"INSERT INTO {table_name} SELECT * FROM payload_df")
         print(f"...{element} loaded into [DuckDB]")
@@ -133,6 +133,7 @@ for gw in range(1,39):
                         'success'
                     ]
                 )
+        
 
     else:
         print(f"x Player GW data for gw{gw} not loaded successfully, error code {r_elements.status_code}")
@@ -156,6 +157,7 @@ if not all_gw_df:
     )
 
 player_gw_df = pd.concat(all_gw_df, ignore_index=True)
+player_gw_df['ingested_at']=datetime.datetime.now()
 
 if len(player_gw_df)==expected_rows:
     print(f"...expected {expected_rows} rows of player gw data, got {len(player_gw_df)} rows")
@@ -164,6 +166,7 @@ if len(player_gw_df)==expected_rows:
     con.execute(f"""
                 CREATE TABLE IF NOT EXISTS raw_gw_data AS SELECT * FROM player_gw_df WHERE 1=0
                 """)
+
 
     # Insert into GW table
     con.execute(f"INSERT INTO raw_gw_data SELECT * FROM player_gw_df")
@@ -235,6 +238,7 @@ if not all_fixtures_df:
     )
 
 fixtures_gw_df = pd.concat(all_fixtures_df, ignore_index=True)
+fixtures_gw_df['ingested_at']=datetime.datetime.now()
 
 if len(fixtures_gw_df)==expected_fixtures:
 
@@ -242,6 +246,7 @@ if len(fixtures_gw_df)==expected_fixtures:
     con.execute(f"""
                 CREATE TABLE IF NOT EXISTS raw_fixtures AS SELECT * FROM fixtures_gw_df WHERE 1=0
                 """)
+
 
     # Insert into GW table
     con.execute(f"INSERT INTO raw_fixtures SELECT * FROM fixtures_gw_df")

@@ -1,7 +1,7 @@
 import datetime
 import duckdb
 
-con = duckdb.connect("../data/raw_layer.db")
+con = duckdb.connect("../data/fpl-mentat.duckdb")
 
 tables = [
         'raw_teams',
