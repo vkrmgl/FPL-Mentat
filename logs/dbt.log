@@ -29,3 +29,92 @@ Happy modeling!
 [0m10:34:24.443677 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55fa10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55c260>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10b55ef90>]}
 [0m10:34:24.443865 [debug] [MainThread]: Flushing usage events
 [0m10:34:24.607327 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m13:42:47.489882 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c25e120>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10cb08800>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c2d7350>]}
+
+
+============================== 13:42:47.492322 | d6b738ba-8180-4636-aed6-1c73eac2819e ==============================
+[0m13:42:47.492322 [info ] [MainThread]: Running with dbt=1.11.7
+[0m13:42:47.492587 [debug] [MainThread]: running dbt with arguments {'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_path': 'logs', 'printer_width': '80', 'partial_parse': 'True', 'log_cache_events': 'False', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'warn_error': 'None', 'version_check': 'True', 'quiet': 'False', 'use_colors': 'True', 'indirect_selection': 'eager', 'empty': 'None', 'debug': 'False', 'introspect': 'True', 'no_print': 'None', 'log_format': 'default', 'use_experimental_parser': 'False', 'fail_fast': 'False', 'profiles_dir': '/Users/vikram/.dbt', 'cache_selected_only': 'False', 'invocation_command': 'dbt debug', 'write_json': 'True'}
+[0m13:42:47.501710 [info ] [MainThread]: dbt version: 1.11.7
+[0m13:42:47.501852 [info ] [MainThread]: python version: 3.12.13
+[0m13:42:47.501956 [info ] [MainThread]: python path: /Users/vikram/Projects/FPL-Mentat/.venv/bin/python3
+[0m13:42:47.502053 [info ] [MainThread]: os info: macOS-26.3.1-arm64-arm-64bit
+[0m13:42:47.541557 [info ] [MainThread]: Using profiles dir at /Users/vikram/.dbt
+[0m13:42:47.541833 [info ] [MainThread]: Using profiles.yml file at /Users/vikram/.dbt/profiles.yml
+[0m13:42:47.541950 [info ] [MainThread]: Using dbt_project.yml file at /Users/vikram/Projects/FPL-Mentat/dbt_project.yml
+[0m13:42:47.543209 [info ] [MainThread]: adapter type: duckdb
+[0m13:42:47.543323 [info ] [MainThread]: adapter version: 1.10.1
+[0m13:42:47.543435 [info ] [MainThread]: Configuration:
+[0m13:42:47.543523 [info ] [MainThread]:   profiles.yml file [[32mOK found and valid[0m]
+[0m13:42:47.543615 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m13:42:47.543704 [info ] [MainThread]: Required dependencies:
+[0m13:42:47.543830 [debug] [MainThread]: Executing "git --help"
+[0m13:42:47.570867 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]\n           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]\n           [--super-prefix=<path>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone     Clone a repository into a new directory\n   init      Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add       Add file contents to the index\n   mv        Move or rename a file, a directory, or a symlink\n   restore   Restore working tree files\n   rm        Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect    Use binary search to find the commit that introduced a bug\n   diff      Show changes between commits, commit and working tree, etc\n   grep      Print lines matching a pattern\n   log       Show commit logs\n   show      Show various types of objects\n   status    Show the working tree status\n\ngrow, mark and tweak your common history\n   branch    List, create, or delete branches\n   commit    Record changes to the repository\n   merge     Join two or more development histories together\n   rebase    Reapply commits on top of another base tip\n   reset     Reset current HEAD to the specified state\n   switch    Switch branches\n   tag       Create, list, delete or verify a tag object signed with GPG\n\ncollaborate (see also: git help workflows)\n   fetch     Download objects and refs from another repository\n   pull      Fetch from and integrate with another repository or a local branch\n   push      Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m13:42:47.571261 [debug] [MainThread]: STDERR: "b''"
+[0m13:42:47.571405 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m13:42:47.571540 [info ] [MainThread]: Connection:
+[0m13:42:47.571669 [info ] [MainThread]:   database: fpl-mentat
+[0m13:42:47.571765 [info ] [MainThread]:   schema: main
+[0m13:42:47.571853 [info ] [MainThread]:   path: ~/Projects/FPL-Mentat/data/fpl-mentat.duckdb
+[0m13:42:47.571949 [info ] [MainThread]:   config_options: None
+[0m13:42:47.572035 [info ] [MainThread]:   extensions: None
+[0m13:42:47.572120 [info ] [MainThread]:   settings: {}
+[0m13:42:47.572206 [info ] [MainThread]:   external_root: .
+[0m13:42:47.572288 [info ] [MainThread]:   use_credential_provider: None
+[0m13:42:47.572371 [info ] [MainThread]:   attach: None
+[0m13:42:47.572453 [info ] [MainThread]:   filesystems: None
+[0m13:42:47.572535 [info ] [MainThread]:   remote: None
+[0m13:42:47.572618 [info ] [MainThread]:   plugins: None
+[0m13:42:47.572702 [info ] [MainThread]:   disable_transactions: False
+[0m13:42:47.572969 [info ] [MainThread]: Registered adapter: duckdb=1.10.1
+[0m13:42:47.628020 [debug] [MainThread]: Acquiring new duckdb connection 'debug'
+[0m13:42:47.666209 [debug] [MainThread]: Using duckdb connection "debug"
+[0m13:42:47.666375 [debug] [MainThread]: On debug: select 1 as id
+[0m13:42:47.666473 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m13:42:47.676916 [debug] [MainThread]: SQL status: OK in 0.010 seconds
+[0m13:42:47.677318 [debug] [MainThread]: On debug: Close
+[0m13:42:47.677448 [info ] [MainThread]:   Connection test: [[32mOK connection ok[0m]
+
+[0m13:42:47.677573 [info ] [MainThread]: [31m1 check failed:[0m
+[0m13:42:47.677663 [info ] [MainThread]: Project loading failed for the following reason:
+ project path </Users/vikram/Projects/FPL-Mentat/dbt_project.yml> not found
+
+[0m13:42:47.677912 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.22755608, "process_in_blocks": "0", "process_kernel_time": 0.201724, "process_mem_max_rss": "158744576", "process_out_blocks": "0", "process_user_time": 1.100545}
+[0m13:42:47.678108 [debug] [MainThread]: Command `dbt debug` failed at 13:42:47.678066 after 0.23 seconds
+[0m13:42:47.678235 [debug] [MainThread]: Connection 'debug' was properly closed.
+[0m13:42:47.678364 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10c25e120>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d12b9b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10d1299a0>]}
+[0m13:42:47.678513 [debug] [MainThread]: Flushing usage events
+[0m13:42:47.915179 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m16:54:20.672455 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1091f55e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a868b60>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a868890>]}
+
+
+============================== 16:54:20.675154 | ee34e55b-c47d-4a4b-a8d9-80f8929eb977 ==============================
+[0m16:54:20.675154 [info ] [MainThread]: Running with dbt=1.11.7
+[0m16:54:20.675400 [debug] [MainThread]: running dbt with arguments {'use_colors': 'True', 'indirect_selection': 'eager', 'printer_width': '80', 'fail_fast': 'False', 'quiet': 'False', 'introspect': 'True', 'log_cache_events': 'False', 'profiles_dir': '/Users/vikram/.dbt', 'empty': 'False', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'cache_selected_only': 'False', 'invocation_command': 'dbt run --select staging', 'target_path': 'None', 'send_anonymous_usage_stats': 'True', 'warn_error': 'None', 'log_format': 'default', 'no_print': 'None', 'partial_parse': 'True', 'debug': 'False', 'use_experimental_parser': 'False', 'version_check': 'True', 'write_json': 'True', 'log_path': 'logs'}
+[0m16:54:20.675634 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/vikram/Projects/FPL-Mentat/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m16:54:20.675900 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.037049334, "process_in_blocks": "0", "process_kernel_time": 0.107806, "process_mem_max_rss": "126566400", "process_out_blocks": "0", "process_user_time": 0.95662}
+[0m16:54:20.676092 [debug] [MainThread]: Command `dbt run` failed at 16:54:20.676055 after 0.04 seconds
+[0m16:54:20.676214 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a7d8fb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a48bc20>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a67c770>]}
+[0m16:54:20.676324 [debug] [MainThread]: Flushing usage events
+[0m16:54:20.927581 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m17:24:05.816556 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a5dfb30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10a42f4a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac3fc50>]}
+
+
+============================== 17:24:05.819200 | c1c79cb3-0944-4855-b0ac-44979604fb4a ==============================
+[0m17:24:05.819200 [info ] [MainThread]: Running with dbt=1.11.7
+[0m17:24:05.819467 [debug] [MainThread]: running dbt with arguments {'empty': 'None', 'invocation_command': 'dbt source freshness', 'no_print': 'None', 'profiles_dir': '/Users/vikram/.dbt', 'write_json': 'True', 'log_format': 'default', 'partial_parse': 'True', 'static_parser': 'True', 'quiet': 'False', 'printer_width': '80', 'target_path': 'None', 'fail_fast': 'False', 'log_path': 'logs', 'log_cache_events': 'False', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'send_anonymous_usage_stats': 'True', 'debug': 'False', 'version_check': 'True', 'use_colors': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'warn_error': 'None', 'introspect': 'True', 'cache_selected_only': 'False'}
+[0m17:24:05.819731 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /Users/vikram/Projects/FPL-Mentat/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m17:24:05.820012 [debug] [MainThread]: Resource report: {"command_name": "freshness", "command_success": false, "command_wall_clock_time": 0.036906123, "process_in_blocks": "0", "process_kernel_time": 0.104237, "process_mem_max_rss": "127057920", "process_out_blocks": "0", "process_user_time": 0.934016}
+[0m17:24:05.820256 [debug] [MainThread]: Command `dbt source freshness` failed at 17:24:05.820213 after 0.04 seconds
+[0m17:24:05.820380 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac78f80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac7acc0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10ac7aed0>]}
+[0m17:24:05.820490 [debug] [MainThread]: Flushing usage events
+[0m17:24:06.074715 [debug] [MainThread]: An error was encountered while trying to flush usage events

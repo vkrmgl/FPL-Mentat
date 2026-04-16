@@ -1,7 +1,7 @@
 [project]
 name = "fpl-mentat"
 authors = [{name = "Vikram Magal", email = "vikrammagal@outlook.com"}]
-version = "0.1.2"
+version = "0.1.3"
 description = "Predict the best players in a Premier League gameweek to maximize your FPL points"
 readme = "README.md"
 requires-python = "~=3.12.0"
