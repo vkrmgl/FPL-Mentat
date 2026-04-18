@@ -1,5 +1,5 @@
 name: 'fpl_mentat'
-version: '0.1.3'
+version: '0.1.4'
 
 profile: 'fpl_mentat'
 
@@ -23,5 +23,5 @@ models:
       +materialized: table
     intermediate:
       +materialized: table
-    marts:
+    mart:
       +materialized: table
