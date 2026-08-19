@@ -50,6 +50,8 @@ scripts/
   build_scoring_rules.py derive and validate the scoring seed
   train_appearance.py    appearance and minutes model
   train_team_model.py    Dixon-Coles team model, walk-forward
+  project_horizon.py     project every player across the next H gameweeks
+  predict_gameweek.py    single-gameweek projections and a recommended squad
   run_simulation.py      end-to-end: components -> simulation -> evaluation
   score_baseline.py      the old direct-regression model, for reference
   fplm/                  shared library (api, warehouse, features, components,
@@ -60,6 +62,7 @@ dbt/
   models/mart/           fct_player_fixture (training), dims, gameweek facts
   seeds/                 validated scoring rules, squad composition
   tests/                 grain, reconciliation and leakage assertions
+app/streamlit_app.py     projections table + squad advice by team ID
 docs/target-spec.html    full architecture spec
 ```
 
@@ -69,7 +72,8 @@ docs/target-spec.html    full architecture spec
 uv sync
 python scripts/ingest.py --entry <your-id> --league <your-league-id>
 cd dbt && dbt build
-python scripts/run_simulation.py --sims 1000 --gameweeks 1-5
+python scripts/project_horizon.py --horizon 5 --sims 3000
+streamlit run app/streamlit_app.py
 ```
 
 Ingestion is append-only and deduplicated by payload hash, so re-running is a
@@ -80,4 +84,11 @@ point-in-time player attributes possible at all.
 
 Python, DuckDB, dbt, LightGBM, SciPy (HiGHS for the MILP), uv.
 
-Orchestration and a hosted front end are not built yet.
+Orchestration and hosting are not built yet; the app runs locally.
+
+## What is not modelled
+
+Pre-season friendlies. The FPL API does not publish them, and FBref exposes no
+scrapeable club-friendlies competition - both were checked. A player who has
+looked sharp or been played out of position through August is invisible here,
+which matters most in the opening weeks and fades as real form accumulates.

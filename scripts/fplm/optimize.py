@@ -68,11 +68,36 @@ class SquadOptimizer:
             )
 
     def solve(self, players, value_column="xp", rival_ownership=None,
-              differential_weight=0.0, locked=None, banned=None):
+              differential_weight=0.0, locked=None, banned=None,
+              bench_weight=0.15, min_bench_p_play=0.55, availability_floor=0.75,
+              fixture_column=None, max_defensive_per_fixture=None):
         """Pick a squad, a starting XI and a captain.
 
         Variable layout is [squad | start | captain], each of length n, so the
         constraint matrices below are blocks over those three segments.
+
+        Three rules here exist because leaving them out produces squads that
+        look fine in a table and are obviously wrong to anyone who plays:
+
+        bench_weight / min_bench_p_play
+            With the bench worth nothing in the objective it is chosen on price
+            alone, and fills up with third-choice keepers and academy forwards
+            who will not take the pitch. A bench only has value when it can
+            cover a non-starter, so bench slots carry a fraction of their points
+            and every squad member must clear a floor on the probability of
+            actually playing.
+
+        availability_floor
+            FPL publishes a percentage chance of playing. A player flagged at
+            75% with an "unspecified injury" is not a bargain, he is a warning,
+            and the optimiser has no business selecting him just because he is
+            cheap.
+
+        max_defensive_per_fixture
+            Clean sheets on opposite sides of the same match are mutually
+            exclusive. Selecting a goalkeeper from one team and defenders from
+            their opponent guarantees at most one of the two returns, which the
+            expected-points sum cannot see because it ignores correlation.
         """
         players = players.reset_index(drop=True)
         n = len(players)
@@ -87,8 +112,14 @@ class SquadOptimizer:
         position = players["position"].to_numpy()
         team = players["team_id"].to_numpy()
 
-        # Minimise the negative: starters score once, the captain again.
-        objective = np.concatenate([np.zeros(n), -value, -value])
+        # Minimise the negative: squad members carry a fraction of their value
+        # (a bench slot is worth something, just not full price), starters carry
+        # the rest, and the captain scores once more.
+        objective = np.concatenate([
+            -value * bench_weight,
+            -value * (1.0 - bench_weight),
+            -value,
+        ])
 
         constraints = []
 
@@ -133,8 +164,27 @@ class SquadOptimizer:
         constraints.append(LinearConstraint(np.array(rows_start), -np.inf, 0))
         constraints.append(LinearConstraint(np.array(rows_captain), -np.inf, 0))
 
+        # Defensive returns from both sides of one fixture cannot both happen.
+        if fixture_column is not None and max_defensive_per_fixture:
+            defensive = np.isin(position, [1, 2]).astype(float)
+            for fixture in players[fixture_column].dropna().unique():
+                mask = (players[fixture_column] == fixture).to_numpy() * defensive
+                if mask.sum() > max_defensive_per_fixture:
+                    constraints.append(LinearConstraint(
+                        block(squad_w=mask), 0, max_defensive_per_fixture))
+
         lower = np.zeros(3 * n)
         upper = np.ones(3 * n)
+
+        # Rule out anyone carrying an injury flag, and anyone unlikely to take
+        # the pitch at all - a bench slot only has value if it can cover.
+        if "chance_of_playing" in players.columns:
+            flagged = players["chance_of_playing"].fillna(100.0).to_numpy() < availability_floor * 100
+            upper[np.flatnonzero(flagged)] = 0.0
+        if "p_play" in players.columns and min_bench_p_play:
+            unlikely = players["p_play"].fillna(0.0).to_numpy() < min_bench_p_play
+            upper[np.flatnonzero(unlikely)] = 0.0
+
         if locked:
             for pid in locked:
                 hits = players.index[players.player_id == pid]

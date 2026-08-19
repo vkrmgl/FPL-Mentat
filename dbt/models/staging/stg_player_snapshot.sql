@@ -19,6 +19,11 @@ with snapshots as (
     select
         season,
         id as player_id,
+        -- FPL reassigns `id` every season but `code` follows the player for
+        -- their whole career - Raya carries one code across six seasons and five
+        -- different ids. It is the only way to link a player to their own
+        -- history, which is what makes a gameweek-1 prediction possible at all.
+        code as player_code,
         coalesce(snapshot_at, ingested_at) as valid_from,
 
         first_name,

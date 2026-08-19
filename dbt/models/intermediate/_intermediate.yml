@@ -126,3 +126,20 @@ models:
         description: >
           Distinguishes a rested starter from a player working back from a long
           absence, which appearance rates alone cannot.
+
+  - name: int_player_prior_season
+    description: >
+      Grain: season x player_code. Last season's per-90 rates, labelled with the
+      season they feed rather than the one they describe.
+
+      Exists for the cold start: in gameweek 1 every rolling form feature is
+      null because no match has been played, and 78% of a new season's squad
+      list has a prior season to fall back on. Keyed on the career-stable
+      `player_code` - FPL reassigns `player_id` every August.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_code]
+    columns:
+      - name: player_code
+        tests: [not_null]
