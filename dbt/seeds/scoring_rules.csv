@@ -1,0 +1,480 @@
+season,identifier,position,rule_type,unit_size,points,min_value,verified,note
+2016-17,minutes,1,threshold,1,1,1,True,appearance
+2016-17,minutes,2,threshold,1,1,1,True,appearance
+2016-17,minutes,3,threshold,1,1,1,True,appearance
+2016-17,minutes,4,threshold,1,1,1,True,appearance
+2016-17,minutes,1,threshold,1,2,60,True,60+ minutes
+2016-17,minutes,2,threshold,1,2,60,True,60+ minutes
+2016-17,minutes,3,threshold,1,2,60,True,60+ minutes
+2016-17,minutes,4,threshold,1,2,60,True,60+ minutes
+2016-17,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2016-17,goals_scored,2,per_unit,1,6,1,True,
+2016-17,goals_scored,3,per_unit,1,5,1,True,
+2016-17,goals_scored,4,per_unit,1,4,1,True,
+2016-17,clean_sheets,1,threshold,1,4,1,True,
+2016-17,clean_sheets,2,threshold,1,4,1,True,
+2016-17,clean_sheets,3,threshold,1,1,1,True,
+2016-17,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2016-17,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2016-17,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2016-17,penalties_saved,1,per_unit,1,5,1,True,
+2016-17,assists,1,per_unit,1,3,1,True,
+2016-17,assists,2,per_unit,1,3,1,True,
+2016-17,assists,3,per_unit,1,3,1,True,
+2016-17,assists,4,per_unit,1,3,1,True,
+2016-17,penalties_missed,1,per_unit,1,-2,1,True,
+2016-17,penalties_missed,2,per_unit,1,-2,1,True,
+2016-17,penalties_missed,3,per_unit,1,-2,1,True,
+2016-17,penalties_missed,4,per_unit,1,-2,1,True,
+2016-17,own_goals,1,per_unit,1,-2,1,True,
+2016-17,own_goals,2,per_unit,1,-2,1,True,
+2016-17,own_goals,3,per_unit,1,-2,1,True,
+2016-17,own_goals,4,per_unit,1,-2,1,True,
+2016-17,yellow_cards,1,per_unit,1,-1,1,True,
+2016-17,yellow_cards,2,per_unit,1,-1,1,True,
+2016-17,yellow_cards,3,per_unit,1,-1,1,True,
+2016-17,yellow_cards,4,per_unit,1,-1,1,True,
+2016-17,red_cards,1,per_unit,1,-3,1,True,
+2016-17,red_cards,2,per_unit,1,-3,1,True,
+2016-17,red_cards,3,per_unit,1,-3,1,True,
+2016-17,red_cards,4,per_unit,1,-3,1,True,
+2016-17,bonus,1,passthrough,1,1,1,True,value is the points
+2016-17,bonus,2,passthrough,1,1,1,True,value is the points
+2016-17,bonus,3,passthrough,1,1,1,True,value is the points
+2016-17,bonus,4,passthrough,1,1,1,True,value is the points
+2017-18,minutes,1,threshold,1,1,1,True,appearance
+2017-18,minutes,2,threshold,1,1,1,True,appearance
+2017-18,minutes,3,threshold,1,1,1,True,appearance
+2017-18,minutes,4,threshold,1,1,1,True,appearance
+2017-18,minutes,1,threshold,1,2,60,True,60+ minutes
+2017-18,minutes,2,threshold,1,2,60,True,60+ minutes
+2017-18,minutes,3,threshold,1,2,60,True,60+ minutes
+2017-18,minutes,4,threshold,1,2,60,True,60+ minutes
+2017-18,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2017-18,goals_scored,2,per_unit,1,6,1,True,
+2017-18,goals_scored,3,per_unit,1,5,1,True,
+2017-18,goals_scored,4,per_unit,1,4,1,True,
+2017-18,clean_sheets,1,threshold,1,4,1,True,
+2017-18,clean_sheets,2,threshold,1,4,1,True,
+2017-18,clean_sheets,3,threshold,1,1,1,True,
+2017-18,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2017-18,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2017-18,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2017-18,penalties_saved,1,per_unit,1,5,1,True,
+2017-18,assists,1,per_unit,1,3,1,True,
+2017-18,assists,2,per_unit,1,3,1,True,
+2017-18,assists,3,per_unit,1,3,1,True,
+2017-18,assists,4,per_unit,1,3,1,True,
+2017-18,penalties_missed,1,per_unit,1,-2,1,True,
+2017-18,penalties_missed,2,per_unit,1,-2,1,True,
+2017-18,penalties_missed,3,per_unit,1,-2,1,True,
+2017-18,penalties_missed,4,per_unit,1,-2,1,True,
+2017-18,own_goals,1,per_unit,1,-2,1,True,
+2017-18,own_goals,2,per_unit,1,-2,1,True,
+2017-18,own_goals,3,per_unit,1,-2,1,True,
+2017-18,own_goals,4,per_unit,1,-2,1,True,
+2017-18,yellow_cards,1,per_unit,1,-1,1,True,
+2017-18,yellow_cards,2,per_unit,1,-1,1,True,
+2017-18,yellow_cards,3,per_unit,1,-1,1,True,
+2017-18,yellow_cards,4,per_unit,1,-1,1,True,
+2017-18,red_cards,1,per_unit,1,-3,1,True,
+2017-18,red_cards,2,per_unit,1,-3,1,True,
+2017-18,red_cards,3,per_unit,1,-3,1,True,
+2017-18,red_cards,4,per_unit,1,-3,1,True,
+2017-18,bonus,1,passthrough,1,1,1,True,value is the points
+2017-18,bonus,2,passthrough,1,1,1,True,value is the points
+2017-18,bonus,3,passthrough,1,1,1,True,value is the points
+2017-18,bonus,4,passthrough,1,1,1,True,value is the points
+2018-19,minutes,1,threshold,1,1,1,True,appearance
+2018-19,minutes,2,threshold,1,1,1,True,appearance
+2018-19,minutes,3,threshold,1,1,1,True,appearance
+2018-19,minutes,4,threshold,1,1,1,True,appearance
+2018-19,minutes,1,threshold,1,2,60,True,60+ minutes
+2018-19,minutes,2,threshold,1,2,60,True,60+ minutes
+2018-19,minutes,3,threshold,1,2,60,True,60+ minutes
+2018-19,minutes,4,threshold,1,2,60,True,60+ minutes
+2018-19,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2018-19,goals_scored,2,per_unit,1,6,1,True,
+2018-19,goals_scored,3,per_unit,1,5,1,True,
+2018-19,goals_scored,4,per_unit,1,4,1,True,
+2018-19,clean_sheets,1,threshold,1,4,1,True,
+2018-19,clean_sheets,2,threshold,1,4,1,True,
+2018-19,clean_sheets,3,threshold,1,1,1,True,
+2018-19,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2018-19,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2018-19,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2018-19,penalties_saved,1,per_unit,1,5,1,True,
+2018-19,assists,1,per_unit,1,3,1,True,
+2018-19,assists,2,per_unit,1,3,1,True,
+2018-19,assists,3,per_unit,1,3,1,True,
+2018-19,assists,4,per_unit,1,3,1,True,
+2018-19,penalties_missed,1,per_unit,1,-2,1,True,
+2018-19,penalties_missed,2,per_unit,1,-2,1,True,
+2018-19,penalties_missed,3,per_unit,1,-2,1,True,
+2018-19,penalties_missed,4,per_unit,1,-2,1,True,
+2018-19,own_goals,1,per_unit,1,-2,1,True,
+2018-19,own_goals,2,per_unit,1,-2,1,True,
+2018-19,own_goals,3,per_unit,1,-2,1,True,
+2018-19,own_goals,4,per_unit,1,-2,1,True,
+2018-19,yellow_cards,1,per_unit,1,-1,1,True,
+2018-19,yellow_cards,2,per_unit,1,-1,1,True,
+2018-19,yellow_cards,3,per_unit,1,-1,1,True,
+2018-19,yellow_cards,4,per_unit,1,-1,1,True,
+2018-19,red_cards,1,per_unit,1,-3,1,True,
+2018-19,red_cards,2,per_unit,1,-3,1,True,
+2018-19,red_cards,3,per_unit,1,-3,1,True,
+2018-19,red_cards,4,per_unit,1,-3,1,True,
+2018-19,bonus,1,passthrough,1,1,1,True,value is the points
+2018-19,bonus,2,passthrough,1,1,1,True,value is the points
+2018-19,bonus,3,passthrough,1,1,1,True,value is the points
+2018-19,bonus,4,passthrough,1,1,1,True,value is the points
+2019-20,minutes,1,threshold,1,1,1,True,appearance
+2019-20,minutes,2,threshold,1,1,1,True,appearance
+2019-20,minutes,3,threshold,1,1,1,True,appearance
+2019-20,minutes,4,threshold,1,1,1,True,appearance
+2019-20,minutes,1,threshold,1,2,60,True,60+ minutes
+2019-20,minutes,2,threshold,1,2,60,True,60+ minutes
+2019-20,minutes,3,threshold,1,2,60,True,60+ minutes
+2019-20,minutes,4,threshold,1,2,60,True,60+ minutes
+2019-20,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2019-20,goals_scored,2,per_unit,1,6,1,True,
+2019-20,goals_scored,3,per_unit,1,5,1,True,
+2019-20,goals_scored,4,per_unit,1,4,1,True,
+2019-20,clean_sheets,1,threshold,1,4,1,True,
+2019-20,clean_sheets,2,threshold,1,4,1,True,
+2019-20,clean_sheets,3,threshold,1,1,1,True,
+2019-20,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2019-20,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2019-20,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2019-20,penalties_saved,1,per_unit,1,5,1,True,
+2019-20,assists,1,per_unit,1,3,1,True,
+2019-20,assists,2,per_unit,1,3,1,True,
+2019-20,assists,3,per_unit,1,3,1,True,
+2019-20,assists,4,per_unit,1,3,1,True,
+2019-20,penalties_missed,1,per_unit,1,-2,1,True,
+2019-20,penalties_missed,2,per_unit,1,-2,1,True,
+2019-20,penalties_missed,3,per_unit,1,-2,1,True,
+2019-20,penalties_missed,4,per_unit,1,-2,1,True,
+2019-20,own_goals,1,per_unit,1,-2,1,True,
+2019-20,own_goals,2,per_unit,1,-2,1,True,
+2019-20,own_goals,3,per_unit,1,-2,1,True,
+2019-20,own_goals,4,per_unit,1,-2,1,True,
+2019-20,yellow_cards,1,per_unit,1,-1,1,True,
+2019-20,yellow_cards,2,per_unit,1,-1,1,True,
+2019-20,yellow_cards,3,per_unit,1,-1,1,True,
+2019-20,yellow_cards,4,per_unit,1,-1,1,True,
+2019-20,red_cards,1,per_unit,1,-3,1,True,
+2019-20,red_cards,2,per_unit,1,-3,1,True,
+2019-20,red_cards,3,per_unit,1,-3,1,True,
+2019-20,red_cards,4,per_unit,1,-3,1,True,
+2019-20,bonus,1,passthrough,1,1,1,True,value is the points
+2019-20,bonus,2,passthrough,1,1,1,True,value is the points
+2019-20,bonus,3,passthrough,1,1,1,True,value is the points
+2019-20,bonus,4,passthrough,1,1,1,True,value is the points
+2020-21,minutes,1,threshold,1,1,1,True,appearance
+2020-21,minutes,2,threshold,1,1,1,True,appearance
+2020-21,minutes,3,threshold,1,1,1,True,appearance
+2020-21,minutes,4,threshold,1,1,1,True,appearance
+2020-21,minutes,1,threshold,1,2,60,True,60+ minutes
+2020-21,minutes,2,threshold,1,2,60,True,60+ minutes
+2020-21,minutes,3,threshold,1,2,60,True,60+ minutes
+2020-21,minutes,4,threshold,1,2,60,True,60+ minutes
+2020-21,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2020-21,goals_scored,2,per_unit,1,6,1,True,
+2020-21,goals_scored,3,per_unit,1,5,1,True,
+2020-21,goals_scored,4,per_unit,1,4,1,True,
+2020-21,clean_sheets,1,threshold,1,4,1,True,
+2020-21,clean_sheets,2,threshold,1,4,1,True,
+2020-21,clean_sheets,3,threshold,1,1,1,True,
+2020-21,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2020-21,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2020-21,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2020-21,penalties_saved,1,per_unit,1,5,1,True,
+2020-21,assists,1,per_unit,1,3,1,True,
+2020-21,assists,2,per_unit,1,3,1,True,
+2020-21,assists,3,per_unit,1,3,1,True,
+2020-21,assists,4,per_unit,1,3,1,True,
+2020-21,penalties_missed,1,per_unit,1,-2,1,True,
+2020-21,penalties_missed,2,per_unit,1,-2,1,True,
+2020-21,penalties_missed,3,per_unit,1,-2,1,True,
+2020-21,penalties_missed,4,per_unit,1,-2,1,True,
+2020-21,own_goals,1,per_unit,1,-2,1,True,
+2020-21,own_goals,2,per_unit,1,-2,1,True,
+2020-21,own_goals,3,per_unit,1,-2,1,True,
+2020-21,own_goals,4,per_unit,1,-2,1,True,
+2020-21,yellow_cards,1,per_unit,1,-1,1,True,
+2020-21,yellow_cards,2,per_unit,1,-1,1,True,
+2020-21,yellow_cards,3,per_unit,1,-1,1,True,
+2020-21,yellow_cards,4,per_unit,1,-1,1,True,
+2020-21,red_cards,1,per_unit,1,-3,1,True,
+2020-21,red_cards,2,per_unit,1,-3,1,True,
+2020-21,red_cards,3,per_unit,1,-3,1,True,
+2020-21,red_cards,4,per_unit,1,-3,1,True,
+2020-21,bonus,1,passthrough,1,1,1,True,value is the points
+2020-21,bonus,2,passthrough,1,1,1,True,value is the points
+2020-21,bonus,3,passthrough,1,1,1,True,value is the points
+2020-21,bonus,4,passthrough,1,1,1,True,value is the points
+2021-22,minutes,1,threshold,1,1,1,True,appearance
+2021-22,minutes,2,threshold,1,1,1,True,appearance
+2021-22,minutes,3,threshold,1,1,1,True,appearance
+2021-22,minutes,4,threshold,1,1,1,True,appearance
+2021-22,minutes,1,threshold,1,2,60,True,60+ minutes
+2021-22,minutes,2,threshold,1,2,60,True,60+ minutes
+2021-22,minutes,3,threshold,1,2,60,True,60+ minutes
+2021-22,minutes,4,threshold,1,2,60,True,60+ minutes
+2021-22,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2021-22,goals_scored,2,per_unit,1,6,1,True,
+2021-22,goals_scored,3,per_unit,1,5,1,True,
+2021-22,goals_scored,4,per_unit,1,4,1,True,
+2021-22,clean_sheets,1,threshold,1,4,1,True,
+2021-22,clean_sheets,2,threshold,1,4,1,True,
+2021-22,clean_sheets,3,threshold,1,1,1,True,
+2021-22,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2021-22,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2021-22,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2021-22,penalties_saved,1,per_unit,1,5,1,True,
+2021-22,assists,1,per_unit,1,3,1,True,
+2021-22,assists,2,per_unit,1,3,1,True,
+2021-22,assists,3,per_unit,1,3,1,True,
+2021-22,assists,4,per_unit,1,3,1,True,
+2021-22,penalties_missed,1,per_unit,1,-2,1,True,
+2021-22,penalties_missed,2,per_unit,1,-2,1,True,
+2021-22,penalties_missed,3,per_unit,1,-2,1,True,
+2021-22,penalties_missed,4,per_unit,1,-2,1,True,
+2021-22,own_goals,1,per_unit,1,-2,1,True,
+2021-22,own_goals,2,per_unit,1,-2,1,True,
+2021-22,own_goals,3,per_unit,1,-2,1,True,
+2021-22,own_goals,4,per_unit,1,-2,1,True,
+2021-22,yellow_cards,1,per_unit,1,-1,1,True,
+2021-22,yellow_cards,2,per_unit,1,-1,1,True,
+2021-22,yellow_cards,3,per_unit,1,-1,1,True,
+2021-22,yellow_cards,4,per_unit,1,-1,1,True,
+2021-22,red_cards,1,per_unit,1,-3,1,True,
+2021-22,red_cards,2,per_unit,1,-3,1,True,
+2021-22,red_cards,3,per_unit,1,-3,1,True,
+2021-22,red_cards,4,per_unit,1,-3,1,True,
+2021-22,bonus,1,passthrough,1,1,1,True,value is the points
+2021-22,bonus,2,passthrough,1,1,1,True,value is the points
+2021-22,bonus,3,passthrough,1,1,1,True,value is the points
+2021-22,bonus,4,passthrough,1,1,1,True,value is the points
+2022-23,minutes,1,threshold,1,1,1,True,appearance
+2022-23,minutes,2,threshold,1,1,1,True,appearance
+2022-23,minutes,3,threshold,1,1,1,True,appearance
+2022-23,minutes,4,threshold,1,1,1,True,appearance
+2022-23,minutes,1,threshold,1,2,60,True,60+ minutes
+2022-23,minutes,2,threshold,1,2,60,True,60+ minutes
+2022-23,minutes,3,threshold,1,2,60,True,60+ minutes
+2022-23,minutes,4,threshold,1,2,60,True,60+ minutes
+2022-23,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2022-23,goals_scored,2,per_unit,1,6,1,True,
+2022-23,goals_scored,3,per_unit,1,5,1,True,
+2022-23,goals_scored,4,per_unit,1,4,1,True,
+2022-23,clean_sheets,1,threshold,1,4,1,True,
+2022-23,clean_sheets,2,threshold,1,4,1,True,
+2022-23,clean_sheets,3,threshold,1,1,1,True,
+2022-23,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2022-23,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2022-23,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2022-23,penalties_saved,1,per_unit,1,5,1,True,
+2022-23,assists,1,per_unit,1,3,1,True,
+2022-23,assists,2,per_unit,1,3,1,True,
+2022-23,assists,3,per_unit,1,3,1,True,
+2022-23,assists,4,per_unit,1,3,1,True,
+2022-23,penalties_missed,1,per_unit,1,-2,1,True,
+2022-23,penalties_missed,2,per_unit,1,-2,1,True,
+2022-23,penalties_missed,3,per_unit,1,-2,1,True,
+2022-23,penalties_missed,4,per_unit,1,-2,1,True,
+2022-23,own_goals,1,per_unit,1,-2,1,True,
+2022-23,own_goals,2,per_unit,1,-2,1,True,
+2022-23,own_goals,3,per_unit,1,-2,1,True,
+2022-23,own_goals,4,per_unit,1,-2,1,True,
+2022-23,yellow_cards,1,per_unit,1,-1,1,True,
+2022-23,yellow_cards,2,per_unit,1,-1,1,True,
+2022-23,yellow_cards,3,per_unit,1,-1,1,True,
+2022-23,yellow_cards,4,per_unit,1,-1,1,True,
+2022-23,red_cards,1,per_unit,1,-3,1,True,
+2022-23,red_cards,2,per_unit,1,-3,1,True,
+2022-23,red_cards,3,per_unit,1,-3,1,True,
+2022-23,red_cards,4,per_unit,1,-3,1,True,
+2022-23,bonus,1,passthrough,1,1,1,True,value is the points
+2022-23,bonus,2,passthrough,1,1,1,True,value is the points
+2022-23,bonus,3,passthrough,1,1,1,True,value is the points
+2022-23,bonus,4,passthrough,1,1,1,True,value is the points
+2023-24,minutes,1,threshold,1,1,1,True,appearance
+2023-24,minutes,2,threshold,1,1,1,True,appearance
+2023-24,minutes,3,threshold,1,1,1,True,appearance
+2023-24,minutes,4,threshold,1,1,1,True,appearance
+2023-24,minutes,1,threshold,1,2,60,True,60+ minutes
+2023-24,minutes,2,threshold,1,2,60,True,60+ minutes
+2023-24,minutes,3,threshold,1,2,60,True,60+ minutes
+2023-24,minutes,4,threshold,1,2,60,True,60+ minutes
+2023-24,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2023-24,goals_scored,2,per_unit,1,6,1,True,
+2023-24,goals_scored,3,per_unit,1,5,1,True,
+2023-24,goals_scored,4,per_unit,1,4,1,True,
+2023-24,clean_sheets,1,threshold,1,4,1,True,
+2023-24,clean_sheets,2,threshold,1,4,1,True,
+2023-24,clean_sheets,3,threshold,1,1,1,True,
+2023-24,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2023-24,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2023-24,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2023-24,penalties_saved,1,per_unit,1,5,1,True,
+2023-24,assists,1,per_unit,1,3,1,True,
+2023-24,assists,2,per_unit,1,3,1,True,
+2023-24,assists,3,per_unit,1,3,1,True,
+2023-24,assists,4,per_unit,1,3,1,True,
+2023-24,penalties_missed,1,per_unit,1,-2,1,True,
+2023-24,penalties_missed,2,per_unit,1,-2,1,True,
+2023-24,penalties_missed,3,per_unit,1,-2,1,True,
+2023-24,penalties_missed,4,per_unit,1,-2,1,True,
+2023-24,own_goals,1,per_unit,1,-2,1,True,
+2023-24,own_goals,2,per_unit,1,-2,1,True,
+2023-24,own_goals,3,per_unit,1,-2,1,True,
+2023-24,own_goals,4,per_unit,1,-2,1,True,
+2023-24,yellow_cards,1,per_unit,1,-1,1,True,
+2023-24,yellow_cards,2,per_unit,1,-1,1,True,
+2023-24,yellow_cards,3,per_unit,1,-1,1,True,
+2023-24,yellow_cards,4,per_unit,1,-1,1,True,
+2023-24,red_cards,1,per_unit,1,-3,1,True,
+2023-24,red_cards,2,per_unit,1,-3,1,True,
+2023-24,red_cards,3,per_unit,1,-3,1,True,
+2023-24,red_cards,4,per_unit,1,-3,1,True,
+2023-24,bonus,1,passthrough,1,1,1,True,value is the points
+2023-24,bonus,2,passthrough,1,1,1,True,value is the points
+2023-24,bonus,3,passthrough,1,1,1,True,value is the points
+2023-24,bonus,4,passthrough,1,1,1,True,value is the points
+2024-25,minutes,1,threshold,1,1,1,True,appearance
+2024-25,minutes,2,threshold,1,1,1,True,appearance
+2024-25,minutes,3,threshold,1,1,1,True,appearance
+2024-25,minutes,4,threshold,1,1,1,True,appearance
+2024-25,minutes,1,threshold,1,2,60,True,60+ minutes
+2024-25,minutes,2,threshold,1,2,60,True,60+ minutes
+2024-25,minutes,3,threshold,1,2,60,True,60+ minutes
+2024-25,minutes,4,threshold,1,2,60,True,60+ minutes
+2024-25,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2024-25,goals_scored,2,per_unit,1,6,1,True,
+2024-25,goals_scored,3,per_unit,1,5,1,True,
+2024-25,goals_scored,4,per_unit,1,4,1,True,
+2024-25,clean_sheets,1,threshold,1,4,1,True,
+2024-25,clean_sheets,2,threshold,1,4,1,True,
+2024-25,clean_sheets,3,threshold,1,1,1,True,
+2024-25,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2024-25,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2024-25,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2024-25,penalties_saved,1,per_unit,1,5,1,True,
+2024-25,assists,1,per_unit,1,3,1,True,
+2024-25,assists,2,per_unit,1,3,1,True,
+2024-25,assists,3,per_unit,1,3,1,True,
+2024-25,assists,4,per_unit,1,3,1,True,
+2024-25,penalties_missed,1,per_unit,1,-2,1,True,
+2024-25,penalties_missed,2,per_unit,1,-2,1,True,
+2024-25,penalties_missed,3,per_unit,1,-2,1,True,
+2024-25,penalties_missed,4,per_unit,1,-2,1,True,
+2024-25,own_goals,1,per_unit,1,-2,1,True,
+2024-25,own_goals,2,per_unit,1,-2,1,True,
+2024-25,own_goals,3,per_unit,1,-2,1,True,
+2024-25,own_goals,4,per_unit,1,-2,1,True,
+2024-25,yellow_cards,1,per_unit,1,-1,1,True,
+2024-25,yellow_cards,2,per_unit,1,-1,1,True,
+2024-25,yellow_cards,3,per_unit,1,-1,1,True,
+2024-25,yellow_cards,4,per_unit,1,-1,1,True,
+2024-25,red_cards,1,per_unit,1,-3,1,True,
+2024-25,red_cards,2,per_unit,1,-3,1,True,
+2024-25,red_cards,3,per_unit,1,-3,1,True,
+2024-25,red_cards,4,per_unit,1,-3,1,True,
+2024-25,bonus,1,passthrough,1,1,1,True,value is the points
+2024-25,bonus,2,passthrough,1,1,1,True,value is the points
+2024-25,bonus,3,passthrough,1,1,1,True,value is the points
+2024-25,bonus,4,passthrough,1,1,1,True,value is the points
+2025-26,minutes,1,threshold,1,1,1,True,appearance
+2025-26,minutes,2,threshold,1,1,1,True,appearance
+2025-26,minutes,3,threshold,1,1,1,True,appearance
+2025-26,minutes,4,threshold,1,1,1,True,appearance
+2025-26,minutes,1,threshold,1,2,60,True,60+ minutes
+2025-26,minutes,2,threshold,1,2,60,True,60+ minutes
+2025-26,minutes,3,threshold,1,2,60,True,60+ minutes
+2025-26,minutes,4,threshold,1,2,60,True,60+ minutes
+2025-26,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2025-26,goals_scored,2,per_unit,1,6,1,True,
+2025-26,goals_scored,3,per_unit,1,5,1,True,
+2025-26,goals_scored,4,per_unit,1,4,1,True,
+2025-26,clean_sheets,1,threshold,1,4,1,True,
+2025-26,clean_sheets,2,threshold,1,4,1,True,
+2025-26,clean_sheets,3,threshold,1,1,1,True,
+2025-26,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2025-26,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2025-26,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2025-26,penalties_saved,1,per_unit,1,5,1,True,
+2025-26,assists,1,per_unit,1,3,1,True,
+2025-26,assists,2,per_unit,1,3,1,True,
+2025-26,assists,3,per_unit,1,3,1,True,
+2025-26,assists,4,per_unit,1,3,1,True,
+2025-26,penalties_missed,1,per_unit,1,-2,1,True,
+2025-26,penalties_missed,2,per_unit,1,-2,1,True,
+2025-26,penalties_missed,3,per_unit,1,-2,1,True,
+2025-26,penalties_missed,4,per_unit,1,-2,1,True,
+2025-26,own_goals,1,per_unit,1,-2,1,True,
+2025-26,own_goals,2,per_unit,1,-2,1,True,
+2025-26,own_goals,3,per_unit,1,-2,1,True,
+2025-26,own_goals,4,per_unit,1,-2,1,True,
+2025-26,yellow_cards,1,per_unit,1,-1,1,True,
+2025-26,yellow_cards,2,per_unit,1,-1,1,True,
+2025-26,yellow_cards,3,per_unit,1,-1,1,True,
+2025-26,yellow_cards,4,per_unit,1,-1,1,True,
+2025-26,red_cards,1,per_unit,1,-3,1,True,
+2025-26,red_cards,2,per_unit,1,-3,1,True,
+2025-26,red_cards,3,per_unit,1,-3,1,True,
+2025-26,red_cards,4,per_unit,1,-3,1,True,
+2025-26,bonus,1,passthrough,1,1,1,True,value is the points
+2025-26,bonus,2,passthrough,1,1,1,True,value is the points
+2025-26,bonus,3,passthrough,1,1,1,True,value is the points
+2025-26,bonus,4,passthrough,1,1,1,True,value is the points
+2025-26,defensive_contribution,2,threshold,1,2,10,True,10+ CBIT
+2025-26,defensive_contribution,3,threshold,1,2,12,True,12+ CBIRT
+2025-26,defensive_contribution,4,threshold,1,2,12,True,12+ CBIRT
+2026-27,minutes,1,threshold,1,1,1,True,appearance
+2026-27,minutes,2,threshold,1,1,1,True,appearance
+2026-27,minutes,3,threshold,1,1,1,True,appearance
+2026-27,minutes,4,threshold,1,1,1,True,appearance
+2026-27,minutes,1,threshold,1,2,60,True,60+ minutes
+2026-27,minutes,2,threshold,1,2,60,True,60+ minutes
+2026-27,minutes,3,threshold,1,2,60,True,60+ minutes
+2026-27,minutes,4,threshold,1,2,60,True,60+ minutes
+2026-27,goals_scored,1,per_unit,1,6,1,True,"confirmed by the single observed GK goal, 2020-21"
+2026-27,goals_scored,2,per_unit,1,6,1,True,
+2026-27,goals_scored,3,per_unit,1,5,1,True,
+2026-27,goals_scored,4,per_unit,1,4,1,True,
+2026-27,clean_sheets,1,threshold,1,4,1,True,
+2026-27,clean_sheets,2,threshold,1,4,1,True,
+2026-27,clean_sheets,3,threshold,1,1,1,True,
+2026-27,goals_conceded,1,per_unit,2,-1,2,True,-1 per 2 conceded
+2026-27,goals_conceded,2,per_unit,2,-1,2,True,-1 per 2 conceded
+2026-27,saves,1,per_unit,3,1,3,True,+1 per 3 saves
+2026-27,penalties_saved,1,per_unit,1,5,1,True,
+2026-27,assists,1,per_unit,1,3,1,True,
+2026-27,assists,2,per_unit,1,3,1,True,
+2026-27,assists,3,per_unit,1,3,1,True,
+2026-27,assists,4,per_unit,1,3,1,True,
+2026-27,penalties_missed,1,per_unit,1,-2,1,True,
+2026-27,penalties_missed,2,per_unit,1,-2,1,True,
+2026-27,penalties_missed,3,per_unit,1,-2,1,True,
+2026-27,penalties_missed,4,per_unit,1,-2,1,True,
+2026-27,own_goals,1,per_unit,1,-2,1,True,
+2026-27,own_goals,2,per_unit,1,-2,1,True,
+2026-27,own_goals,3,per_unit,1,-2,1,True,
+2026-27,own_goals,4,per_unit,1,-2,1,True,
+2026-27,yellow_cards,1,per_unit,1,-1,1,True,
+2026-27,yellow_cards,2,per_unit,1,-1,1,True,
+2026-27,yellow_cards,3,per_unit,1,-1,1,True,
+2026-27,yellow_cards,4,per_unit,1,-1,1,True,
+2026-27,red_cards,1,per_unit,1,-3,1,True,
+2026-27,red_cards,2,per_unit,1,-3,1,True,
+2026-27,red_cards,3,per_unit,1,-3,1,True,
+2026-27,red_cards,4,per_unit,1,-3,1,True,
+2026-27,bonus,1,passthrough,1,1,1,True,value is the points
+2026-27,bonus,2,passthrough,1,1,1,True,value is the points
+2026-27,bonus,3,passthrough,1,1,1,True,value is the points
+2026-27,bonus,4,passthrough,1,1,1,True,value is the points
+2026-27,defensive_contribution,2,threshold,1,2,10,True,10+ CBIT
+2026-27,defensive_contribution,3,threshold,1,2,12,True,12+ CBIRT
+2026-27,defensive_contribution,4,threshold,1,2,12,True,12+ CBIRT

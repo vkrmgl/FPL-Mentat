@@ -1,0 +1,5 @@
+packages:
+  # Grain enforcement across the project depends on
+  # dbt_utils.unique_combination_of_columns - see docs/target-spec.html.
+  - package: dbt-labs/dbt_utils
+    version: [">=1.3.0", "<2.0.0"]

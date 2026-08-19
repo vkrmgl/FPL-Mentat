@@ -1,0 +1,755 @@
+<title>FPL-Mentat — Target Architecture Spec</title>
+
+<style>
+  :root {
+    --ground: #FAF9FC;
+    --raised: #FFFFFF;
+    --ink: #1C1826;
+    --ink-soft: #4A4458;
+    --muted: #6E6880;
+    --rule: #E3DFEA;
+    --rule-soft: #EFECF3;
+    --accent: #6B3FA0;
+    --accent-soft: #F1EBF8;
+    --alert: #B33A2B;
+    --alert-soft: #FBEDEB;
+    --ok: #17796B;
+
+    --raw: #6D5BD0;
+    --stage: #17897B;
+    --inter: #C4553C;
+    --mart: #A8791B;
+    --py: #2E6DA4;
+
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #121017;
+      --raised: #191622;
+      --ink: #E9E6F0;
+      --ink-soft: #B9B3C6;
+      --muted: #918AA2;
+      --rule: #2C2639;
+      --rule-soft: #221D2E;
+      --accent: #B191E0;
+      --accent-soft: #241B33;
+      --alert: #E8897B;
+      --alert-soft: #2C1D1B;
+      --ok: #5CBFAE;
+
+      --raw: #9C8DEA;
+      --stage: #3FB5A4;
+      --inter: #E5806A;
+      --mart: #D6AB4A;
+      --py: #6BA5DC;
+    }
+  }
+
+  :root[data-theme="light"] {
+    --ground: #FAF9FC; --raised: #FFFFFF; --ink: #1C1826; --ink-soft: #4A4458;
+    --muted: #6E6880; --rule: #E3DFEA; --rule-soft: #EFECF3;
+    --accent: #6B3FA0; --accent-soft: #F1EBF8; --alert: #B33A2B; --alert-soft: #FBEDEB; --ok: #17796B;
+    --raw: #6D5BD0; --stage: #17897B; --inter: #C4553C; --mart: #A8791B; --py: #2E6DA4;
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #121017; --raised: #191622; --ink: #E9E6F0; --ink-soft: #B9B3C6;
+    --muted: #918AA2; --rule: #2C2639; --rule-soft: #221D2E;
+    --accent: #B191E0; --accent-soft: #241B33; --alert: #E8897B; --alert-soft: #2C1D1B; --ok: #5CBFAE;
+    --raw: #9C8DEA; --stage: #3FB5A4; --inter: #E5806A; --mart: #D6AB4A; --py: #6BA5DC;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.25rem;
+  }
+
+  /* ---- masthead ---- */
+  .masthead { display: flex; flex-direction: column; gap: 1rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    line-height: 1.05;
+    text-wrap: balance;
+    margin: 0;
+  }
+  .standfirst {
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    text-wrap: pretty;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem;
+    font-family: var(--mono); font-size: 0.76rem; color: var(--muted);
+    border-top: 1px solid var(--rule); padding-top: 0.9rem;
+  }
+  .meta b { color: var(--ink-soft); font-weight: 500; }
+
+  /* ---- sections ---- */
+  section { display: flex; flex-direction: column; gap: 1rem; scroll-margin-top: 2rem; }
+  h2 {
+    font-size: 1.55rem; font-weight: 700; letter-spacing: -0.021em;
+    margin: 0; text-wrap: balance;
+  }
+  h3 {
+    font-size: 1.02rem; font-weight: 650; letter-spacing: -0.011em;
+    margin: 1.1rem 0 0; text-wrap: balance;
+  }
+  p { margin: 0; max-width: 72ch; text-wrap: pretty; }
+  ul, ol { margin: 0; padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.4rem; max-width: 72ch; }
+  li::marker { color: var(--muted); }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  code {
+    font-family: var(--mono); font-size: 0.855em;
+    background: var(--rule-soft); padding: 0.1em 0.36em;
+    border-radius: 3px; word-break: break-word;
+  }
+
+  /* layer-coded section spine */
+  .layer {
+    border-left: 3px solid var(--spine, var(--rule));
+    padding-left: 1.15rem;
+  }
+  .layer > .eyebrow { color: var(--spine, var(--accent)); }
+  .l-raw   { --spine: var(--raw); }
+  .l-stage { --spine: var(--stage); }
+  .l-inter { --spine: var(--inter); }
+  .l-mart  { --spine: var(--mart); }
+  .l-py    { --spine: var(--py); }
+
+  /* ---- tables ---- */
+  .scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--raised); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.86rem; min-width: 40rem; }
+  th, td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); font-weight: 500;
+    border-bottom: 1px solid var(--rule); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.name { font-family: var(--mono); font-size: 0.79rem; white-space: nowrap; color: var(--ink); }
+  td.grain { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .tag {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.05em;
+    padding: 0.12em 0.45em; border-radius: 3px; white-space: nowrap;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .tag.new { background: var(--accent-soft); color: var(--accent); }
+  .tag.keep { background: var(--rule-soft); color: var(--muted); }
+  .tag.drop { background: var(--alert-soft); color: var(--alert); }
+
+  /* ---- callouts ---- */
+  .note {
+    background: var(--raised); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0; padding: 0.95rem 1.15rem;
+    display: flex; flex-direction: column; gap: 0.45rem;
+  }
+  .note.warn { border-left-color: var(--alert); }
+  .note .label {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .note.warn .label { color: var(--alert); }
+  .note p { font-size: 0.93rem; }
+
+  /* ---- figures ---- */
+  figure { margin: 0.5rem 0; display: flex; flex-direction: column; gap: 0.7rem; }
+  .figbox { overflow-x: auto; background: var(--raised); border: 1px solid var(--rule); border-radius: 6px; padding: 1.1rem; }
+  figure svg { display: block; max-width: 100%; height: auto; min-width: 34rem; }
+  figcaption { font-size: 0.83rem; color: var(--muted); max-width: 66ch; }
+  figcaption b { color: var(--ink-soft); font-weight: 600; }
+
+  .svg-label { font-family: ui-monospace, Menlo, monospace; font-size: 11px; fill: currentColor; }
+  .svg-sub { font-family: ui-monospace, Menlo, monospace; font-size: 9.5px; }
+  .svg-lane { font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.08em; }
+  .svg-edge { font-family: ui-monospace, Menlo, monospace; font-size: 9px; }
+
+  /* ---- misc ---- */
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+  details {
+    background: var(--raised); border: 1px solid var(--rule);
+    border-radius: 6px; padding: 0.8rem 1.05rem;
+  }
+  summary { cursor: pointer; font-weight: 600; font-size: 0.93rem; }
+  details > *:not(summary) { margin-top: 0.7rem; }
+  .seq { counter-reset: step; display: flex; flex-direction: column; gap: 0.85rem; padding: 0; list-style: none; }
+  .seq li {
+    counter-increment: step; display: grid;
+    grid-template-columns: 1.9rem 1fr; gap: 0.75rem; align-items: start;
+  }
+  .seq li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono); font-size: 0.74rem; color: var(--accent);
+    padding-top: 0.22rem;
+  }
+  .seq b { font-weight: 650; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Target architecture · for review before build</div>
+    <h1>FPL-Mentat: from gameweek predictions to a manager-level planner</h1>
+    <p class="standfirst">
+      A full rebuild of the transformation and modelling layers around one structural change:
+      keep data at <b>player × fixture</b> grain from source to model, and aggregate only where
+      the question actually asks for a gameweek.
+    </p>
+    <div class="meta">
+      <span><b>Status</b> draft for approval</span>
+      <span><b>Warehouse</b> DuckDB → MotherDuck</span>
+      <span><b>Seasons</b> 2016-17 … 2026-27</span>
+      <span><b>Rows</b> 253,900 backfilled + 36,328 component</span>
+    </div>
+  </header>
+
+  <hr>
+
+  <!-- ============ 1. WHY ============ -->
+  <section>
+    <div class="eyebrow">01 · The structural problem</div>
+    <h2>One grain mismatch causes every current bug</h2>
+    <p>
+      FPL collapses double-gameweek stats into a single row per player per gameweek, but fixtures
+      are naturally one row per match. Joining the two directly fans out on doubles and vanishes on
+      blanks. Every downstream defect traces back to this.
+    </p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 880 292" role="img" aria-label="Today, joining player-gameweek data to fixtures fans out into duplicate rows that corrupt rolling windows. In the target design, data stays at player-fixture grain and is aggregated deliberately at the end.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+            <marker id="ar-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#B33A2B"></path>
+            </marker>
+          </defs>
+
+          <!-- lane 1: today -->
+          <text class="svg-lane" x="0" y="30" fill="currentColor" opacity="0.55">TODAY</text>
+          <rect x="0" y="42" width="196" height="52" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="12" y="63">stg_player_gameweek</text>
+          <text class="svg-sub" x="12" y="80" fill="currentColor" opacity="0.6">player × gameweek</text>
+
+          <line x1="196" y1="68" x2="286" y2="68" stroke="currentColor" stroke-opacity="0.5" marker-end="url(#ar)"></line>
+          <text class="svg-edge" x="241" y="60" text-anchor="middle" fill="currentColor" opacity="0.6">join on gw + team</text>
+
+          <rect x="290" y="42" width="150" height="52" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="302" y="63">stg_fixtures</text>
+          <text class="svg-sub" x="302" y="80" fill="currentColor" opacity="0.6">one row per match</text>
+
+          <line x1="440" y1="68" x2="530" y2="68" stroke="#B33A2B" stroke-width="1.5" marker-end="url(#ar-bad)"></line>
+          <text class="svg-edge" x="485" y="60" text-anchor="middle" fill="#B33A2B">fans out</text>
+
+          <rect x="534" y="42" width="196" height="52" rx="4" fill="none" stroke="#B33A2B" stroke-width="1.5"></rect>
+          <text class="svg-label" x="546" y="63" fill="#B33A2B">int_player_rolling</text>
+          <text class="svg-sub" x="546" y="80" fill="#B33A2B" opacity="0.85">327 duplicated rows</text>
+
+          <line x1="632" y1="94" x2="632" y2="118" stroke="#B33A2B" stroke-dasharray="3 3"></line>
+          <text class="svg-edge" x="740" y="112" text-anchor="middle" fill="#B33A2B">rolling windows count the duplicates</text>
+
+          <line x1="0" y1="146" x2="880" y2="146" stroke="currentColor" stroke-opacity="0.15"></line>
+
+          <!-- lane 2: target -->
+          <text class="svg-lane" x="0" y="180" fill="currentColor" opacity="0.55">TARGET</text>
+          <rect x="0" y="192" width="196" height="52" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="12" y="213">raw_player_fixture_points</text>
+          <text class="svg-sub" x="12" y="230" fill="currentColor" opacity="0.6">player × fixture</text>
+
+          <line x1="196" y1="218" x2="286" y2="218" stroke="currentColor" stroke-opacity="0.5" marker-end="url(#ar)"></line>
+          <text class="svg-edge" x="241" y="210" text-anchor="middle" fill="currentColor" opacity="0.6">already per-fixture</text>
+
+          <rect x="290" y="192" width="150" height="52" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="302" y="213">int_player_fixture</text>
+          <text class="svg-sub" x="302" y="230" fill="currentColor" opacity="0.6">player × fixture</text>
+
+          <line x1="440" y1="218" x2="530" y2="218" stroke="#6B3FA0" stroke-width="1.5" marker-end="url(#ar)" color="#6B3FA0"></line>
+          <text class="svg-edge" x="485" y="210" text-anchor="middle" fill="#6B3FA0">aggregate once</text>
+
+          <rect x="534" y="192" width="196" height="52" rx="4" fill="none" stroke="#6B3FA0" stroke-width="1.5"></rect>
+          <text class="svg-label" x="546" y="213" fill="#6B3FA0">fct_player_gameweek</text>
+          <text class="svg-sub" x="546" y="230" fill="#6B3FA0" opacity="0.85">player × gameweek</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>The fix is a grain change, not a deduplication.</b> Today the fan-out happens before the
+        window functions, so a double gameweek silently consumes two slots of a three-week average.
+        In the target, aggregation is a deliberate final step and doubles are simply two rows summed.
+      </figcaption>
+    </figure>
+
+    <h3>What this single change resolves</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Current defect</th><th>Resolved by</th></tr></thead>
+        <tbody>
+          <tr><td>327 duplicated player-gameweeks corrupting every rolling feature</td><td>Per-fixture grain end to end</td></tr>
+          <tr><td><code>had_blank_gw</code> always 0 — blanks arrive as NULL, never <code>= 0</code></td><td>Complete team × gameweek spine</td></tr>
+          <tr><td><code>next_gw_fixture_cnt</code> wrong — <code>lead()</code> skips missing blank rows</td><td>Complete team × gameweek spine</td></tr>
+          <tr><td><code>int_team_stats_rolling</code> duplicated on 10 team-gameweeks</td><td>Team form rolled over matches, not gameweeks</td></tr>
+          <tr><td>Hand-maintained <code>invalid_players</code> list in the notebook</td><td>Explicit availability model</td></tr>
+          <tr><td>1.8× double-gameweek fudge factor</td><td>Simulate both fixtures and sum</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 2. PRINCIPLES ============ -->
+  <section>
+    <div class="eyebrow">02 · Principles</div>
+    <h2>Four rules the whole design follows</h2>
+    <ol class="seq">
+      <li><span><b>Grain is declared, never incidental.</b> Every model states its grain in a schema
+        description and enforces it with a uniqueness test. A join that changes grain is a bug unless
+        the model name says otherwise.</span></li>
+      <li><span><b>Provenance stays separate until deliberately merged.</b> API-sourced and
+        vaastav-sourced rows live in different raw tables and are unioned in staging with a
+        <code>source</code> column that survives to the mart. Trust levels differ; silent mixing hides that.</span></li>
+      <li><span><b>Player attributes are point-in-time.</b> Price, position, team and set-piece order
+        are as-at-gameweek, never current-state joined across history. This is what the current
+        <code>player_team_corrections</code> seed is manually patching.</span></li>
+      <li><span><b>Scoring rules are versioned, football is not.</b> Component models train on all ten
+        seasons because goals and assists mean the same thing in 2016 as in 2026. Points do not —
+        <code>defensive_contribution</code> arrived in 2025-26 — so scoring is applied last, from a
+        rules table, never learned.</span></li>
+    </ol>
+
+    <div class="note">
+      <span class="label">Why this matters most</span>
+      <p>
+        Principle 4 is what makes the decomposition architecture pay for itself. A direct
+        points-target regressor is only rule-compatible with 2025-26 onward — roughly 30,000 rows.
+        Modelling components and applying current scoring afterwards keeps all 253,900.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 3. DAG ============ -->
+  <section>
+    <div class="eyebrow">03 · Shape</div>
+    <h2>Layer structure</h2>
+    <p>
+      Five layers. dbt owns everything up to the mart; Python owns the models, simulation and
+      optimizer, reading and writing the same warehouse.
+    </p>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 880 470" role="img" aria-label="Five stacked layers: raw sources, staging, intermediate, mart, and a Python model layer. Data flows downward from API and archive sources through staging and intermediate models into fact and dimension tables, then into component models, simulation, and the optimizer, whose projections are written back to the mart.">
+          <defs>
+            <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+          </defs>
+
+          <!-- band guides -->
+          <text class="svg-lane" x="0" y="24" fill="#6D5BD0">RAW</text>
+          <rect x="0" y="32" width="196" height="40" rx="4" fill="none" stroke="#6D5BD0" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="10" y="50" fill="currentColor">FPL API · live</text>
+          <text class="svg-sub" x="10" y="64" fill="currentColor" opacity="0.6">2026-27 forward</text>
+
+          <rect x="212" y="32" width="196" height="40" rx="4" fill="none" stroke="#6D5BD0" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="222" y="50" fill="currentColor">raw_log archive</text>
+          <text class="svg-sub" x="222" y="64" fill="currentColor" opacity="0.6">2025-26 explain</text>
+
+          <rect x="424" y="32" width="196" height="40" rx="4" fill="none" stroke="#6D5BD0" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="434" y="50" fill="currentColor">vaastav backfill</text>
+          <text class="svg-sub" x="434" y="64" fill="currentColor" opacity="0.6">2016-17 … 2025-26</text>
+
+          <rect x="636" y="32" width="196" height="40" rx="4" fill="none" stroke="#6D5BD0" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="646" y="50" fill="currentColor">manager + league</text>
+          <text class="svg-sub" x="646" y="64" fill="currentColor" opacity="0.6">entry, picks, rivals</text>
+
+          <line x1="440" y1="72" x2="440" y2="106" stroke="currentColor" stroke-opacity="0.4" marker-end="url(#ar2)"></line>
+
+          <text class="svg-lane" x="0" y="128" fill="#17897B">STAGING</text>
+          <rect x="0" y="136" width="832" height="52" rx="5" fill="none" stroke="#17897B" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="14" y="156" fill="currentColor">dedupe · type · unify sources · point-in-time snapshots</text>
+          <text class="svg-sub" x="14" y="176" fill="currentColor" opacity="0.65">stg_player_fixture  ·  stg_fixtures  ·  stg_player_snapshot  ·  stg_entry_*  ·  stg_scoring_rules</text>
+
+          <line x1="440" y1="188" x2="440" y2="222" stroke="currentColor" stroke-opacity="0.4" marker-end="url(#ar2)"></line>
+
+          <text class="svg-lane" x="0" y="244" fill="#C4553C">INTERMEDIATE</text>
+          <rect x="0" y="252" width="832" height="52" rx="5" fill="none" stroke="#C4553C" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="14" y="272" fill="currentColor">spines · rolling form over appearances · opponent context</text>
+          <text class="svg-sub" x="14" y="292" fill="currentColor" opacity="0.65">int_team_gameweek_spine  ·  int_team_fixture  ·  int_team_form  ·  int_player_fixture_form</text>
+
+          <line x1="440" y1="304" x2="440" y2="338" stroke="currentColor" stroke-opacity="0.4" marker-end="url(#ar2)"></line>
+
+          <text class="svg-lane" x="0" y="360" fill="#A8791B">MART</text>
+          <rect x="0" y="368" width="832" height="52" rx="5" fill="none" stroke="#A8791B" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="14" y="388" fill="currentColor">facts + dimensions + projections</text>
+          <text class="svg-sub" x="14" y="408" fill="currentColor" opacity="0.65">fct_player_fixture  ·  fct_player_gameweek  ·  dim_*  ·  fct_*_projection</text>
+
+          <line x1="300" y1="420" x2="300" y2="446" stroke="currentColor" stroke-opacity="0.4" marker-end="url(#ar2)"></line>
+          <text class="svg-edge" x="316" y="438" fill="currentColor" opacity="0.6">features</text>
+          <line x1="600" y1="446" x2="600" y2="420" stroke="#2E6DA4" stroke-opacity="0.8" marker-end="url(#ar2)" color="#2E6DA4"></line>
+          <text class="svg-edge" x="616" y="438" fill="#2E6DA4">projections written back</text>
+
+          <text class="svg-lane" x="0" y="462" fill="#2E6DA4">PYTHON</text>
+          <rect x="196" y="446" width="636" height="22" rx="4" fill="none" stroke="#2E6DA4" stroke-opacity="0.6"></rect>
+          <text class="svg-sub" x="210" y="461" fill="currentColor">components → Dixon-Coles simulation → MILP optimizer</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>The mart is the contract.</b> Python reads features from it and writes projections back to
+        it, so the Streamlit app and the optimizer never call a model directly — they query tables.
+        That is also what makes the mart publishable as a read-only API later.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 4. STAGING ============ -->
+  <section class="layer l-stage">
+    <div class="eyebrow">04 · Staging</div>
+    <h2>Dedupe, type, and unify the two sources</h2>
+    <p>
+      Staging is where the API and vaastav lineages become one shape. It is also where the
+      current-state collapse gets removed: <code>stg_player_snapshot</code> keeps every ingest
+      snapshot rather than <code>qualify … = 1</code>.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Model</th><th>Grain</th><th>Notes</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="name">stg_player_fixture</td><td class="grain">player × fixture</td><td>Union of API <code>explain</code> (pivoted to components) and vaastav rows. Carries <code>source</code>.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_player_fixture_points</td><td class="grain">player × fixture × identifier</td><td>Long form component points. 2025-26 onward only.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_player_snapshot</td><td class="grain">player × snapshot_at</td><td>Point-in-time price, position, team, set-piece order, availability. <b>No collapse.</b></td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_fixtures</td><td class="grain">fixture</td><td>Adds season; keeps kickoff for within-gameweek ordering.</td><td><span class="tag keep">revised</span></td></tr>
+          <tr><td class="name">stg_teams</td><td class="grain">season × team</td><td>Season-scoped — promoted teams reuse ids.</td><td><span class="tag keep">revised</span></td></tr>
+          <tr><td class="name">stg_deadlines</td><td class="grain">season × gameweek</td><td>Spine source. Guard for 2019-20's 47 gameweeks.</td><td><span class="tag keep">revised</span></td></tr>
+          <tr><td class="name">stg_scoring_rules</td><td class="grain">season × position × identifier</td><td>Points per event, versioned by season. Seeded, not learned.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_squad_rules</td><td class="grain">season × position</td><td>From <code>raw_element_types</code> — squad size, min/max play. MILP constraints.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_chips</td><td class="grain">season × chip × half</td><td>Availability windows for chip planning.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_entry_picks</td><td class="grain">entry × gameweek × player</td><td>Your squad and rivals'. Only fetchable after each deadline.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_entry_history</td><td class="grain">entry × gameweek</td><td>Points, rank, bank, transfers, chip played.</td><td><span class="tag new">new</span></td></tr>
+          <tr><td class="name">stg_league_standings</td><td class="grain">league × entry × snapshot</td><td>Rival roster for league-relative optimization.</td><td><span class="tag new">new</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <span class="label">Known gap</span>
+      <p>
+        Set-piece order history for 2025-26 GW1–30 does not exist in any source. The six archived
+        snapshots span 16 Apr – 8 May only, and vaastav's <code>players_raw.csv</code> is a single
+        end-of-season capture. Treat pre-2026-27 set-piece features as end-of-season constants and
+        exclude them from any point-in-time claim.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 5. INTERMEDIATE ============ -->
+  <section class="layer l-inter">
+    <div class="eyebrow">05 · Intermediate</div>
+    <h2>Spines and rolling form</h2>
+    <p>
+      Two ideas carry this layer. <b>Spines</b> make absence explicit, so a blank gameweek is a row
+      with <code>fixture_cnt = 0</code> rather than a missing row. <b>Rolling over appearances</b>
+      replaces rolling over gameweeks, so a player's "last five matches" means five matches they
+      actually played, not five calendar slots.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Model</th><th>Grain</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td class="name">int_gameweek_spine</td><td class="grain">season × gameweek</td><td>Every gameweek in every season, from deadlines.</td></tr>
+          <tr><td class="name">int_team_gameweek_spine</td><td class="grain">season × team × gameweek</td><td>Complete cross join. <code>fixture_cnt</code> 0/1/2, <code>is_blank</code>, <code>is_double</code>, and a correct <code>next_gw_fixture_cnt</code>.</td></tr>
+          <tr><td class="name">int_team_fixture</td><td class="grain">team × fixture</td><td>Long form: opponent, home/away, difficulty, goals for/against, kickoff. <b>The unit the simulator consumes.</b></td></tr>
+          <tr><td class="name">int_team_form</td><td class="grain">team × fixture</td><td>Rolling attack/defence over last N <em>matches</em>, ordered by kickoff. Excludes current row.</td></tr>
+          <tr><td class="name">int_player_fixture_form</td><td class="grain">player × fixture</td><td>Rolling per-90 rates over last N <em>appearances</em> — goals, assists, xG, xA, defensive actions, BPS.</td></tr>
+          <tr><td class="name">int_player_availability</td><td class="grain">player × gameweek</td><td>Start rate, minutes distribution, rotation volatility, days since last match, availability tag.</td></tr>
+          <tr><td class="name">int_opponent_context</td><td class="grain">team × fixture</td><td>Opponent form joined through <code>int_team_fixture</code>, avoiding the double self-join that fans out today.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <span class="label">Deliberate change</span>
+      <p>
+        Rolling windows switch from <code>rows between N preceding</code> on gameweek to windows over
+        <em>appearances</em>. A player returning from a five-week injury currently carries an average
+        polluted by five zero rows; under the new definition his form reflects the last five times he
+        was on the pitch, and absence is expressed separately by the availability model.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 6. MART ============ -->
+  <section class="layer l-mart">
+    <div class="eyebrow">06 · Mart</div>
+    <h2>Facts, dimensions, and the projection contract</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Model</th><th>Grain</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td class="name">fct_player_fixture</td><td class="grain">player × fixture</td><td><b>The training table.</b> Features plus every component target.</td></tr>
+          <tr><td class="name">fct_player_gameweek</td><td class="grain">player × gameweek</td><td>Deliberate aggregate for reporting and evaluation.</td></tr>
+          <tr><td class="name">fct_team_fixture</td><td class="grain">team × fixture</td><td>Team-level features for the Dixon-Coles fit.</td></tr>
+          <tr><td class="name">fct_player_fixture_projection</td><td class="grain">player × fixture</td><td>Model output: component expectations and probabilities.</td></tr>
+          <tr><td class="name">fct_player_gameweek_projection</td><td class="grain">player × gameweek</td><td>Simulation output: mean xP plus p10/p50/p90 and P(≥10).</td></tr>
+          <tr><td class="name">fct_squad_recommendation</td><td class="grain">entry × gameweek × option</td><td>Optimizer output: transfers, captain, chip, expected gain.</td></tr>
+          <tr><td class="name">dim_player</td><td class="grain">season × player</td><td>Slowly-changing, with valid-from/valid-to from the snapshot.</td></tr>
+          <tr><td class="name">dim_team / dim_fixture / dim_gameweek</td><td class="grain">—</td><td>Conformed dimensions.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Naming moves from <code>fact_</code> to <code>fct_</code> to match dbt convention. The existing
+      <code>fact_ml_features</code> is replaced by <code>fct_player_fixture</code>; the
+      <code>player_team_corrections</code> seed is retired once <code>dim_player</code> is
+      snapshot-backed.
+    </p>
+  </section>
+
+  <!-- ============ 7. MODELS ============ -->
+  <section class="layer l-py">
+    <div class="eyebrow">07 · Model layer</div>
+    <h2>Components, then simulation</h2>
+    <p>
+      No model predicts points. Each predicts a football quantity; scoring is applied afterwards from
+      <code>stg_scoring_rules</code>. All models are per-position where the mechanics differ.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Component</th><th>Form</th><th>Trains on</th></tr></thead>
+        <tbody>
+          <tr><td class="name">appearance</td><td>3-class: no play / 1–59 / 60+</td><td>All seasons</td></tr>
+          <tr><td class="name">minutes | played</td><td>Conditional distribution, not a point estimate</td><td>All seasons</td></tr>
+          <tr><td class="name">team goals</td><td>Dixon-Coles bivariate Poisson, time-decayed, xG-based</td><td>2022-23 onward</td></tr>
+          <tr><td class="name">goal share</td><td>Player share of team goals, conditional on minutes</td><td>All seasons</td></tr>
+          <tr><td class="name">assist share</td><td>Player share of team assists, conditional on minutes</td><td>All seasons</td></tr>
+          <tr><td class="name">saves</td><td>Poisson, conditional on opponent shots</td><td>All seasons · GK only</td></tr>
+          <tr><td class="name">defensive contribution</td><td>Poisson on CBI + tackles + recoveries</td><td>2025-26 onward</td></tr>
+          <tr><td class="name">bonus / BPS</td><td>BPS rank within fixture → bonus</td><td>All seasons</td></tr>
+          <tr><td class="name">cards</td><td>Low-rate binomial</td><td>All seasons</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure>
+      <div class="figbox">
+        <svg viewBox="0 0 880 250" role="img" aria-label="The simulation loop: a Dixon-Coles scoreline grid and an appearance model feed a single simulated fixture, where goals and assists are allocated to players and current scoring rules applied, producing one points draw. Repeating one thousand times yields a distribution, from which expected points and probability of a haul are read.">
+          <defs>
+            <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+          </defs>
+
+          <rect x="0" y="18" width="168" height="46" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="10" y="38">Dixon-Coles</text>
+          <text class="svg-sub" x="10" y="54" fill="currentColor" opacity="0.6">scoreline grid</text>
+
+          <rect x="0" y="86" width="168" height="46" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="10" y="106">appearance</text>
+          <text class="svg-sub" x="10" y="122" fill="currentColor" opacity="0.6">+ minutes</text>
+
+          <path d="M 168 41 L 205 41 L 205 75" fill="none" stroke="currentColor" stroke-opacity="0.45"></path>
+          <path d="M 168 109 L 205 109 L 205 79" fill="none" stroke="currentColor" stroke-opacity="0.45"></path>
+          <line x1="205" y1="75" x2="248" y2="75" stroke="currentColor" stroke-opacity="0.45" marker-end="url(#ar3)"></line>
+          <text class="svg-edge" x="212" y="68" fill="currentColor" opacity="0.6">sample</text>
+
+          <rect x="252" y="52" width="176" height="46" rx="4" fill="none" stroke="#2E6DA4" stroke-width="1.4"></rect>
+          <text class="svg-label" x="262" y="72" fill="#2E6DA4">one simulated fixture</text>
+          <text class="svg-sub" x="262" y="88" fill="#2E6DA4" opacity="0.8">scoreline + who played</text>
+
+          <line x1="428" y1="75" x2="470" y2="75" stroke="currentColor" stroke-opacity="0.45" marker-end="url(#ar3)"></line>
+          <text class="svg-edge" x="449" y="68" text-anchor="middle" fill="currentColor" opacity="0.6">allocate</text>
+
+          <rect x="474" y="52" width="176" height="46" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="484" y="72">goals · assists · CS</text>
+          <text class="svg-sub" x="484" y="88" fill="currentColor" opacity="0.6">by player share</text>
+
+          <line x1="650" y1="75" x2="692" y2="75" stroke="currentColor" stroke-opacity="0.45" marker-end="url(#ar3)"></line>
+          <text class="svg-edge" x="671" y="68" text-anchor="middle" fill="currentColor" opacity="0.6">score</text>
+
+          <rect x="696" y="52" width="176" height="46" rx="4" fill="none" stroke="currentColor" stroke-opacity="0.35"></rect>
+          <text class="svg-label" x="706" y="72">points, this draw</text>
+          <text class="svg-sub" x="706" y="88" fill="currentColor" opacity="0.6">current rules applied</text>
+
+          <!-- loop back -->
+          <path d="M 784 98 L 784 132 L 340 132 L 340 98" fill="none" stroke="#6B3FA0" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ar3)" color="#6B3FA0"></path>
+          <text class="svg-edge" x="562" y="146" text-anchor="middle" fill="#6B3FA0">repeat 1,000×</text>
+
+          <line x1="784" y1="132" x2="784" y2="178" stroke="currentColor" stroke-opacity="0"></line>
+          <rect x="600" y="176" width="272" height="52" rx="4" fill="none" stroke="#6B3FA0" stroke-width="1.4"></rect>
+          <text class="svg-label" x="612" y="197" fill="#6B3FA0">distribution per player-gameweek</text>
+          <text class="svg-sub" x="612" y="214" fill="#6B3FA0" opacity="0.85">mean xP · p10/p50/p90 · P(≥10) for captaincy</text>
+
+          <path d="M 562 152 L 562 202 L 596 202" fill="none" stroke="#6B3FA0" stroke-opacity="0.7" marker-end="url(#ar3)" color="#6B3FA0"></path>
+
+          <text class="svg-sub" x="0" y="200" fill="currentColor" opacity="0.7">Double gameweeks are</text>
+          <text class="svg-sub" x="0" y="214" fill="currentColor" opacity="0.7">two fixtures summed</text>
+          <text class="svg-sub" x="0" y="228" fill="currentColor" opacity="0.7">within the same draw.</text>
+        </svg>
+      </div>
+      <figcaption>
+        <b>The distribution is the point, not the mean.</b> Captaincy is a right-tail decision:
+        ranking by <code>P(≥10)</code> is not the same as ranking by expected points, and only the
+        simulation produces both. Correlation comes free — a team's defenders share one sampled
+        clean sheet, so squad-level variance is real rather than assumed independent.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 8. OPTIMIZER + SERVING ============ -->
+  <section class="layer l-py">
+    <div class="eyebrow">08 · Decision layer</div>
+    <h2>From projections to a plan</h2>
+    <p>
+      Predicted points are half a decision. The optimizer is a mixed-integer program over a
+      multi-gameweek horizon, consuming <code>fct_player_gameweek_projection</code> and the squad
+      rules already sitting in <code>stg_squad_rules</code>.
+    </p>
+    <ul>
+      <li><b>Objective</b> — maximise expected points over the horizon, less transfer penalties.</li>
+      <li><b>Constraints</b> — budget 100.0, 15-player squad, 11 playing, max three per club, free transfers and −4 hits, valid formation. All read from <code>stg_squad_rules</code> and <code>raw_game_settings</code> rather than hardcoded.</li>
+      <li><b>Chips</b> — wildcard, free hit, bench boost, triple captain as binary decisions within their season-half windows, from <code>stg_chips</code>.</li>
+      <li><b>League-relative mode</b> — when rival picks are known, optimise expected <em>rank</em> rather than expected points. Chasing a leader rewards differentials; protecting a lead rewards template. This is the "win your league" behaviour and it is a different objective, not a filter.</li>
+    </ul>
+
+    <h3>Two horizons, not one</h3>
+    <p>
+      Transfer planning and chip planning have opposite error tolerances, so they get separate passes
+      rather than one compromise horizon.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pass</th><th>Horizon</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="name">transfers</td><td class="grain">H = 5</td>
+            <td><code>max_extra_free_transfers = 4</code>, so the bank caps at five. No save-and-spend
+              strategy exists at six weeks that is not already expressible at five. Re-run weekly, so
+              week-5 precision barely matters.</td>
+          </tr>
+          <tr>
+            <td class="name">chip timing</td><td class="grain">H = 8–10</td>
+            <td>Coarser pass, no individual transfers. Scores which gameweek in the window suits bench
+              boost or triple captain from fixture density and projected squad strength. One-shot per
+              season half, so it needs range more than precision.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      FPL Review projects 14 gameweeks, but that rests on human-in-the-loop xMins refreshed hourly.
+      Without that input, compounding error past roughly eight weeks is mostly noise.
+    </p>
+
+    <h3>Serving</h3>
+    <p>
+      Streamlit Community Cloud reading MotherDuck. The weekly job publishes to MotherDuck; the app
+      only ever runs queries, never models.
+    </p>
+    <ul>
+      <li><b>Public page</b> — gameweek projections, captaincy ranked by <code>P(≥10)</code>, differentials, fixture ticker.</li>
+      <li><b>Team-ID page</b> — enter an entry id, fetch picks live from the FPL API, join to stored projections, return transfer and chip recommendations.</li>
+      <li><b>Cold-start note</b> — an arbitrary visitor's squad is not in the warehouse, so picks are fetched at request time and only projections come from MotherDuck.</li>
+    </ul>
+  </section>
+
+  <!-- ============ 9. TESTS ============ -->
+  <section>
+    <div class="eyebrow">09 · Guardrails</div>
+    <h2>Tests that would have caught every current bug</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Test</th><th>Applied to</th><th>Catches</th></tr></thead>
+        <tbody>
+          <tr><td>unique combination of columns</td><td>Every model, on its declared grain</td><td>The 327-row fan-out, on the run that introduced it</td></tr>
+          <tr><td>not_null on spine keys</td><td>Spines and facts</td><td>Blank gameweeks arriving as NULL</td></tr>
+          <tr><td>relationships</td><td>All foreign keys</td><td>Season-scoped id collisions after promotion</td></tr>
+          <tr><td>accepted_range</td><td><code>fixture_cnt</code> 0–2, minutes 0–120</td><td>Fan-out and bad joins</td></tr>
+          <tr><td>reconciliation</td><td>Σ component points = <code>total_points</code></td><td>Broken component extraction — the check already passing 27,228/27,228</td></tr>
+          <tr><td>no-future-data</td><td>Every rolling feature</td><td>Leakage, asserted rather than assumed</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Materialization: staging and intermediate as views, mart as tables, and the two large facts
+      incremental on <code>season, gameweek</code>. At 254k rows a full rebuild is still seconds, so
+      incremental is for discipline rather than speed.
+    </p>
+  </section>
+
+  <!-- ============ 10. SEQUENCE ============ -->
+  <section>
+    <div class="eyebrow">10 · Sequence</div>
+    <h2>Build order</h2>
+    <ol class="seq">
+      <li><span><b>Scoring rules seed.</b> Encode 2016-17 → 2026-27 point values. Everything downstream depends on it and it is pure reference data.</span></li>
+      <li><span><b>Staging rebuild.</b> Source unification and the point-in-time snapshot. Retires <code>player_team_corrections</code>.</span></li>
+      <li><span><b>Spines and intermediate.</b> Where the grain fix actually lands.</span></li>
+      <li><span><b>Mart + tests.</b> <code>fct_player_fixture</code> green on grain and reconciliation tests.</span></li>
+      <li><span><b>Baseline re-scored.</b> Rerun the existing LightGBM on the corrected mart. Establishes whether the bugs were costing real accuracy before the architecture changes underneath it.</span></li>
+      <li><span><b>Components.</b> Appearance and minutes first — the largest single lever.</span></li>
+      <li><span><b>Simulation.</b> Dixon-Coles, then the sampling loop.</span></li>
+      <li><span><b>Optimizer.</b> Single gameweek, then multi-week, then chips, then league-relative.</span></li>
+      <li><span><b>Streamlit + MotherDuck.</b></span></li>
+      <li><span><b>Orchestration.</b> Docker and Airflow last, once there is a stable thing to schedule.</span></li>
+    </ol>
+    <div class="note">
+      <span class="label">Deadline</span>
+      <p>
+        Gameweek 1 locks at 17:30 UTC on 21 August 2026. Steps 1–4 are the ones worth having before
+        then; everything after can be built against live data as the season runs. Rival picks for a
+        given gameweek are only fetchable after that gameweek's deadline and cannot be backfilled.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 11. OPEN ============ -->
+  <section>
+    <div class="eyebrow">11 · Decisions</div>
+    <h2>Settled, and still open</h2>
+
+    <h3>Settled</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Question</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Target mini-league</td><td><b>Fight Club</b>, league <code>859625</code> — private, 9 entries, admin <code>4043415</code>, starts GW1. Roster captured pre-season.</td></tr>
+          <tr><td>Optimizer horizon</td><td><b>H = 5</b> for transfers (matches the five-transfer bank ceiling), <b>H = 8–10</b> for a separate chip-timing pass.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Still open</h3>
+    <ul>
+      <li><b>Understat.</b> vaastav's xG stops at 2025-26. Live 2026-27 xG needs either a direct Understat scrape or reliance on FPL's own <code>expected_goals</code>, which is available but differently defined.</li>
+      <li><b>Retire <code>scripts/raw_flush.py</code>?</b> It drops the raw tables and is the script that would have destroyed 2025-26. Now superseded.</li>
+      <li><b>Commit the 9.3&nbsp;MB Parquet archive?</b> Would make the season recoverable from GitHub rather than from one laptop.</li>
+    </ul>
+  </section>
+
+</div>
