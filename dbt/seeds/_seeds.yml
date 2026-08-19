@@ -1,0 +1,116 @@
+version: 2
+
+seeds:
+  - name: scoring_rules
+    description: >
+      FPL points awarded per scoring event, versioned by season and position.
+
+      Not hand-authored. For 2025-26 the values are read directly from the
+      `explain` blocks in the raw layer; for every season they are validated by
+      reconstruction - applying these rules to component stats reproduces the
+      recorded `total_points` for 253,578 of 253,578 player-gameweeks across
+      2016-17..2025-26. Regenerate and re-validate with
+      `python scripts/build_scoring_rules.py`.
+
+      Scoring is applied from this table rather than learned, which is what lets
+      component models train across seasons whose rules differ.
+    config:
+      column_types:
+        season: varchar
+        identifier: varchar
+        position: integer
+        rule_type: varchar
+        unit_size: integer
+        points: integer
+        min_value: integer
+        verified: boolean
+        note: varchar
+    columns:
+      - name: season
+        description: Season label, e.g. '2025-26'. Matches the raw layer's season key.
+        tests:
+          - not_null
+      - name: identifier
+        description: >
+          Scoring event name, matching the `identifier` values used by the FPL
+          API's `explain` block (minutes, goals_scored, assists, clean_sheets,
+          goals_conceded, saves, bonus, defensive_contribution, ...).
+        tests:
+          - not_null
+      - name: position
+        description: FPL element_type - 1 GKP, 2 DEF, 3 MID, 4 FWD.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4]
+                quote: false
+      - name: rule_type
+        description: >
+          How `points` is applied.
+          per_unit    - floor(value / unit_size) * points
+          threshold   - points, when value >= min_value; highest matching row wins
+          passthrough - points equals the raw value (bonus)
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['per_unit', 'threshold', 'passthrough']
+      - name: unit_size
+        description: Divisor for per_unit rules - 2 for goals conceded, 3 for saves, else 1.
+        tests:
+          - not_null
+      - name: points
+        description: Points awarded per unit, or per threshold crossing.
+        tests:
+          - not_null
+      - name: min_value
+        description: Minimum event value for the rule to apply.
+        tests:
+          - not_null
+      - name: verified
+        description: >
+          Whether this value was confirmed against observed outcomes rather than
+          taken from the rulebook. Every row currently reconciles.
+        tests:
+          - not_null
+      - name: note
+        description: Provenance or caveat for the row.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - season
+              - identifier
+              - position
+              - min_value
+
+  - name: squad_rules_history
+    description: >
+      Squad composition rules for seasons the API cannot supply.
+
+      `raw_element_types` only exists for seasons ingested live, and unlike
+      teams or fixtures it was never written to the audit log, so it could not
+      be recovered for 2025-26. Composition has been constant across every
+      season the warehouse covers - 2 GKP, 5 DEF, 5 MID, 3 FWD, eleven starting
+      within per-position bounds - so it is seeded rather than inferred.
+
+      This exists because an empty rules frame silently drops every position
+      constraint in the optimizer, which then returns illegal squads that look
+      plausible. See models/staging/stg_squad_rules.sql.
+    columns:
+      - name: season
+        tests: [not_null]
+      - name: position
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4]
+                quote: false
+      - name: squad_count
+        tests: [not_null]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, position]

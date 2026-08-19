@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: int_gameweek_spine
+    description: >
+      Grain: season x gameweek. A dense 1..max range per season, not the set of
+      gameweeks that happen to have fixtures - 2022-23 gameweek 7 was postponed
+      in its entirety, so an observed-only spine would drop it and lead() would
+      step over it.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, gameweek]
+    columns:
+      - name: gameweek
+        tests: [not_null]
+      - name: gameweek_start
+        description: Deadline where known, first kickoff otherwise.
+
+  - name: int_team_gameweek_spine
+    description: >
+      Grain: season x team_id x gameweek. Complete: every team, every gameweek,
+      played or not.
+
+      This model exists because absence must be representable. The old
+      int_fixture_ticker aggregated fixtures, so blanks produced no row - which
+      left `had_blank_gw` permanently false and made `next_gw_fixture_cnt` skip
+      past a blank to the following gameweek.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, team_id, gameweek]
+    columns:
+      - name: fixture_cnt
+        description: Matches this team plays this gameweek. 0 for a blank, 2+ for a double.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 3
+                inclusive: true
+      - name: next_gw_fixture_cnt
+        description: >
+          Fixture count in the following gameweek. Correct only because blanks
+          occupy rows - this is the feature the old 1.8x double-gameweek
+          multiplier keyed on.
+      - name: follows_international_break
+        description: >
+          True when 12 or more days separate this gameweek from the previous
+          one. Derived from the calendar alone; no external source needed.
+
+  - name: int_team_fixture
+    description: >
+      Grain: season x team_id x fixture_id. Every match from both teams' points
+      of view. The unit the Dixon-Coles fit and the simulator consume, and what
+      lets opponent context join without a double self-join.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, team_id, fixture_id]
+    columns:
+      - name: team_id
+        tests: [not_null]
+      - name: opponent_id
+        tests: [not_null]
+      - name: days_since_last_match
+        description: >
+          Rest since this team's previous fixture. The free half of accounting
+          for midweek European and cup football, which the FPL API does not
+          expose at all.
+
+  - name: int_team_form
+    description: >
+      Grain: season x team_id x fixture_id. Rolling form over the last 3, 5 and
+      10 *matches*, attached by ASOF join on a strict inequality so a fixture can
+      only ever see matches that kicked off before it.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, team_id, fixture_id]
+
+  - name: int_player_form
+    description: >
+      Grain: season x player_id x fixture_id. Per-90 rates over the last N
+      appearances.
+
+      Windows count appearances rather than gameweeks, so a player returning
+      from injury is not judged on a run of zero rows he was never fit for.
+      Rates are per 90 minutes so a cameo and a full match are weighted
+      correctly; converting a rate back to an expected total is the minutes
+      model's job.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_id, fixture_id]
+    columns:
+      - name: form_as_of
+        description: >
+          Kickoff of the most recent appearance the form window drew on. Always
+          strictly earlier than this fixture's kickoff - asserted by
+          tests/assert_no_form_leakage.sql.
+
+  - name: int_player_availability
+    description: >
+      Grain: season x player_id x fixture_id. Inputs for the appearance and
+      minutes models.
+
+      Rates here are denominated over every fixture the squad played, including
+      ones the player sat out - a benched appearance is the signal being
+      measured. That is the opposite of int_player_form, which counts
+      appearances only.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_id, fixture_id]
+    columns:
+      - name: appearance_rate_last5
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: days_since_last_appearance
+        description: >
+          Distinguishes a rested starter from a player working back from a long
+          absence, which appearance rates alone cannot.

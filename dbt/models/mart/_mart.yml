@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: fct_player_fixture
+    description: >
+      Grain: season x player_id x fixture_id. The training table.
+
+      Replaces `fact_ml_features`, which sat at gameweek grain with a fan-out
+      that duplicated 327 rows, was non-deterministic on rebuild because
+      `is_prediction_row` compared against `current_timestamp`, and carried a
+      single points target that is only valid under one season's scoring rules.
+
+      Targets here are components. `target_total_points` is kept for evaluation
+      but must not be trained on across seasons - defensive contribution only
+      became a scoring event in 2025-26.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_id, fixture_id]
+    columns:
+      - name: season
+        tests: [not_null]
+      - name: player_id
+        tests: [not_null]
+      - name: fixture_id
+        tests: [not_null]
+      - name: position
+        description: 1 GKP, 2 DEF, 3 MID, 4 FWD, 5 AM (2024-25 only, not a squad slot).
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: target_minutes
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 120
+                inclusive: true
+      - name: appearance_rate_last5
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
+      - name: benchmark_fpl_xp
+        description: >
+          FPL's own expected points for this fixture, from the vaastav lineage.
+          A free public baseline any component model should be measured against.
+
+  - name: fct_player_gameweek
+    description: >
+      Grain: season x player_id x gameweek. Aggregated once, at the end of the
+      pipeline, rather than arriving pre-collapsed and being approximated with a
+      multiplier. Reporting and evaluation only - training happens on
+      fct_player_fixture.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_id, gameweek]
+    columns:
+      - name: fixture_cnt
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 3
+                inclusive: true
+
+  - name: dim_player
+    description: >
+      Grain: season x player_id x valid_from. Slowly-changing type 2. Joining
+      without a validity predicate fans out by design - a point-in-time
+      dimension is the whole reason this model exists.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, player_id, valid_from]
+    columns:
+      - name: attribute_grain
+        description: >
+          'snapshot' for seasons with a real time series; 'season_end' for
+          historical seasons where only a single end-of-season capture exists.
+          Set-piece order must not be read as point-in-time when this is
+          'season_end'.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['snapshot', 'season_end']
+
+  - name: dim_team
+    description: >
+      Grain: season x team_id. Sourced from fixtures rather than the team
+      reference, since the reference is missing for 2018-19.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, team_id]
+    columns:
+      - name: reference_missing
+        description: True where no team reference row exists, so names are null.
+
+  - name: dim_fixture
+    description: "Grain: season x fixture_id."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, fixture_id]
+
+  - name: dim_gameweek
+    description: "Grain: season x gameweek. Calendar, with schedule-shape flags."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [season, gameweek]
